@@ -103,35 +103,7 @@ def ch01_stock():
     save(fig, "ch01_real_stock.png")
 
 
-def cover_banner():
-    fig, ax = plt.subplots(figsize=(12, 3))
-    ax.axis("off")
-    ax.text(
-        0.5,
-        0.55,
-        "Quant-for-Beginners",
-        ha="center",
-        va="center",
-        fontsize=28,
-        fontweight="bold",
-        color="#1a1a2e",
-    )
-    ax.text(
-        0.5,
-        0.25,
-        "中文零基础 · 量化金融学习路线  |  30分钟做出可运行结果",
-        ha="center",
-        va="center",
-        fontsize=14,
-        color="#4a4a6a",
-    )
-    ax.set_facecolor("#f0f4ff")
-    fig.patch.set_facecolor("#f0f4ff")
-    save(fig, "cover_banner.png")
-
-
 if __name__ == "__main__":
-    cover_banner()
     ch01_stock()
     ch02_returns()
     ch03_ma_signals()

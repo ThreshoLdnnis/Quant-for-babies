@@ -1,20 +1,7 @@
----
-  
-引用自《Quant For Beginners》开源课程（作者：程翊博）
-
----
+# 零基础学习量化金融
 
 <p align="center">
-  <a href="notebooks/phase1_intro/01_什么是量化金融.ipynb">
-    <img src="assets/images/cover-phase1.jpg" width="49%" alt="第一期 · 从 Python 到 AI 量化交易实战" style="max-width: 450px; border-radius: 8px;"/>
-  </a>
-  <a href="notebooks/phase2_intro/01_理解波动率.ipynb">
-    <img src="assets/images/cover-phase2.jpg" width="49%" alt="第二期 · 风险与组合管理" style="max-width: 450px; border-radius: 8px;"/>
-  </a>
-</p>
-
-<p align="center">
-  <strong>Quant-for-Beginners</strong> · 中文零基础量化金融 Notebook 路线 · Phase 1 &amp; 2 已上线
+  <strong>Quant-for-babies</strong> · 中文零基础量化金融 Notebook 路线 · Phase 1 &amp; 2 已上线
 </p>
 
 <p align="center">
@@ -28,17 +15,16 @@
   <a href="#快速开始">快速开始</a> ·
   <a href="#课程目录">课程目录</a> ·
   <a href="#学习路线">学习路线</a> ·
-  <a href="#后续规划">后续规划</a> ·
-  <a href="#yibo-quant-成长会">Yibo Quant 成长会</a>
+  <a href="#后续规划">后续规划</a>
 </p>
 
 ---
 
 ## 简介
 
-哈喽，我是 Yibo。这是一份面向**零基础**读者的中文量化金融教程：每章配有可运行的 Notebook 和配套交互演示，边读边跑，把概念落到真实行情上。
+这是一份面向**零基础**读者的中文量化金融教程：每章配有可运行的 Notebook 和配套交互演示，边读边跑，把概念落到真实行情上。
 
-本仓库由 **Yibo** 整理维护，侧重可运行的代码与清晰图示，而非堆砌公式。内容持续更新，欢迎 Star 方便日后查阅。
+本课程侧重可运行的代码与清晰图示，而非堆砌公式。内容持续更新，欢迎 Star 方便日后查阅。
 
 | 项目 | 说明 |
 |------|------|
@@ -53,8 +39,8 @@
 ## 快速开始
 
 ```bash
-git clone https://github.com/ThreshoLdnnis/quant-for-beginners.git
-cd quant-for-beginners
+git clone https://github.com/ThreshoLdnnis/Quant-for-babies.git
+cd Quant-for-babies
 pip install -r requirements.txt
 jupyter lab
 ```
@@ -149,7 +135,7 @@ Phase 4（规划）  机器学习与 AI 量化
 ## 仓库结构
 
 ```
-quant-for-beginners/
+Quant-for-babies/
 ├── notebooks/
 │   ├── phase1_intro/         # 第一期（第 1～4 章）
 │   └── phase2_intro/         # 第二期（第 5～8 章）
@@ -178,81 +164,6 @@ quant-for-beginners/
 完整说明见 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
 ---
-
-## Yibo Quant 成长会
-
-<p align="center">
-  <img src="assets/images/yiboquant-growth-club.jpg" width="100%" alt="Yibo Quant 成长会" style="max-width: 920px; border-radius: 8px;"/>
-</p>
-
-**Yibo Quant 成长会**是完全开源、免费的量化长期成长社群，面向对量化投资、算法建模有强烈热情、具备自主学习能力的优秀学习者开放。
-
-社群以**学术研究**与**真实项目实战**为两大支柱：无付费门槛、无商业引流，汇聚纯粹热爱量化的同路人。我们会定期开展量化前沿文献研读、策略理论深度分享，组队落地完整的量化开源实战项目；同时开放免费学习资料、源码库与交流渠道，搭建纯粹、高质量、轻量化的量化自主研习圈层。
-
-为保持讨论质量，社群采用**有门槛的录取机制**。
-
-**投递通道**：[cyibo815@163.com](mailto:cyibo815@163.com)
-
----
-
-## 截止目前，Github的Star数为603
-## 截止目前，GitLink的Star数为48（已包含上一版本）
-
----
-
----
-
-## 🌟 《Quant For Beginners》卓越推荐馆
-
-> **Yibo说：** 开源不仅是代码的分享，更是智慧的传递。从首期课程上线至今，有这样两位伙伴，他们从学员中走来，以助教之名行热爱之事。他们不仅自己学得通透，更用无数个日夜的耐心解答，为后来者点亮了前行的路。特设此馆，以表敬意。
-
----
-
-### 👑 卓越推荐官：蔡平
-
-> *从"自己会写"到"把别人教懂"，他完成了量化认知的真正闭环。*
-
-- **GitHub：** [github.com/caicai-917](https://github.com/caicai-917)
-- **GitLink：** [www.gitlink.org.cn/caicai917](https://www.gitlink.org.cn/caicai917)
-
-**推荐语：**
-
-两期课程，双重身份。初阶时，她在真实数据中撰写双均线策略，叩开量化实操的大门；进阶时，她跳出盈亏的数字游戏，转而深挖波动率、夏普与最大回撤的真意。
-
-她说："**自己写代码是手艺，把人讲明白才是功力。感谢Yibo老师，有你、有我、有大家，我们很幸福。**"为了解答群里五花八门的疑问，他把课程复盘了一遍又一遍，曾经模糊的知识死角被彻底照亮。这份对风险的敬畏和对教学的赤诚，是量化路上最难得的品质。
-
----
-
-### 👑 卓越推荐官：沈炜健
-
-> *从"盲目跟跑"到"自主探索"，他验证了量化学习的方法论最优解。*
-
-- **GitHub：** [github.com/xunfang-ta](https://github.com/xunfang-ta)
-- **GitLink：** [www.gitlink.org.cn/xunfang](https://www.gitlink.org.cn/xunfang)
-
-**推荐语：**
-
-从零基础的初学者，到善于发现规律的探索者，他总结出了量化的"四步法则"：**做出假设 — 寻找数据 — 实验验证 — 制定规则**。
-
-担任助教的日子里，他坚持启发式引导，从不直接灌输答案，而是带领小伙伴在一次次的探索中印证"适合自己的策略才是最好的策略"。他既是开源教育的受益者，也正在成为开源火种的传递者。
-
-他说："**没有万能策略，适合自己体系的，才是最优解。  感谢Yibo老师的开源分享，希望我们的教育普惠事业做的越来越好。**"
-
----
-
-**结语：** 感谢二位为社区倾注的热情与专业。开源教育路长且阻，但因为有你们，《Quant For Beginners》的量化银河，必将群星闪耀。
-  
----
-
-
-
-## 作者
-
-**Yibo Cheng（翊博）** — 项目发起人与主要维护者  
-GitHub：[@yibohere](https://github.com/yibohere)
-
----
-
 
 ## 免责声明
 

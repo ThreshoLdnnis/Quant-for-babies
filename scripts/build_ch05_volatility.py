@@ -5,13 +5,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "notebooks" / "phase2_intro" / "01_理解波动率.ipynb"
 
-COVER = (
-    '<p align="center">\n'
-    '  <img src="./yibo quant.jpg" alt="课程封面" width="1300"/>\n'
-    "</p>\n"
-)
-
-
 def md(text: str) -> dict:
     return {"cell_type": "markdown", "metadata": {}, "source": text.splitlines(keepends=True)}
 
@@ -51,9 +44,8 @@ def nb(cells: list) -> dict:
 
 
 cells = [
-    md(COVER),
     md(
-        "# 《和Yibo零基础学习量化金融》\n"
+        "# 《零基础学习量化金融》\n"
         "## 从 Python 到 AI 量化交易实战 · Phase 2：风险与组合管理\n"
         "### 第五章：理解波动率"
     ),
@@ -81,7 +73,7 @@ cells = [
         "\n"
         "---\n"
         "\n"
-        "Yibo 先说句心里话：\n"
+        "先说句心里话：\n"
         "\n"
         "很多教程会把波动率讲成「标准差，完事了」。但你在真实账户里感受到的 **焦虑、失眠、想割肉**，才是这一章真正要对接的东西。\n"
         "\n"
@@ -511,7 +503,7 @@ cells = [
         "- **情绪交易**：在低点割肉，在高点追涨\n"
         "- **提前下车**：没等到终点 +20%，反而锁定亏损\n"
         "\n"
-        "所以 Yibo 想强调：\n"
+        "这里需要强调：\n"
         "\n"
         "> **波动率不仅是数学指标，也是投资体验。**  \n"
         "> **体验太差，会导致错误的操作——最终「理论上的收益」你根本拿不到。**\n"

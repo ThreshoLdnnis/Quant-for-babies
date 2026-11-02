@@ -5,12 +5,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "notebooks" / "phase2_intro"
 
-COVER = (
-    '<p align="center">\n'
-    '  <img src="./yibo-quant.jpg" alt="课程封面" width="1300"/>\n'
-    "</p>\n"
-)
-
 ENV_CODE = """\
 # ========== 环境准备：导入库并设置画图中文 ==========
 import warnings
@@ -70,9 +64,8 @@ def notebook(cells: list) -> dict:
 
 def header(chapter_num: int, title: str) -> list:
     return [
-        md(COVER),
         md(
-            f"# 《和Yibo零基础学习量化金融》\n"
+            f"# 《零基础学习量化金融》\n"
             f"## 从Python到AI量化交易实战 第二期\n"
             f"### 第{chapter_num}章：{title}"
         ),

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""打包第二期内容到 quant-for-beginners-Alpha 发布目录。"""
+"""打包第二期内容到 Quant-for-babies-Alpha 发布目录。"""
 from __future__ import annotations
 
 import json
@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-DEST = ROOT.parent / "quant-for-beginners-Alpha"
+DEST = ROOT.parent / "Quant-for-babies-Alpha"
 
 NOTEBOOKS = [
     "01_理解波动率.ipynb",
@@ -19,7 +19,6 @@ IMAGES = [
     "Benoit Mandelbrot.jpg",
     "Harry Markowitz.jpg",
     "Robert Engle.jpg",
-    "yibo quant.jpg",
 ]
 HTML = [
     "daily-return-demo.html",
@@ -51,9 +50,9 @@ venv/
 Thumbs.db
 """
 
-README = """# quant-for-beginners-Alpha · 第二期
+README = """# 零基础学习量化金融 · 第二期
 
-《和Yibo零基础学习量化金融》**第二期**（第 5～8 章）：
+《零基础学习量化金融》**第二期**（第 5～8 章）：
 
 | 章 | Notebook |
 |----|----------|
@@ -101,6 +100,7 @@ def main() -> None:
         shutil.copy2(src_html / name, html_dir / name)
 
     shutil.copy2(ROOT / "requirements.txt", DEST / "requirements.txt")
+    shutil.copy2(ROOT / "LICENSE", DEST / "LICENSE")
     (DEST / ".gitignore").write_text(GITIGNORE, encoding="utf-8")
     (DEST / "README.md").write_text(README, encoding="utf-8")
 
