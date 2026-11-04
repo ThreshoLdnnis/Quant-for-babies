@@ -1,6 +1,9 @@
 <p align="center">
   <img src="assets/images/readme-cover.jpg" alt="Quant for babies 量化小白入门课程封面" width="100%" />
 </p>
+<p align="center">
+  <img src="assets/images/IMG_2267.jpg" alt="logo" width="100%" />
+</p>
 
 # 零基础学习量化金融
 
