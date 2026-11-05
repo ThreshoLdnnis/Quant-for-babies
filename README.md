@@ -8,7 +8,7 @@
 # 零基础学习量化金融
 
 <p align="center">
-  <strong>Quant-for-babies</strong> · 中文零基础量化金融 Notebook 路线 · Phase 1 &amp; 2 已上线
+  <strong>Quant-for-babies</strong> · 中文零基础量化金融 Notebook 路线 · 第一期、第二期与番外期课件已上线
 </p>
 
 <p align="center">
@@ -21,6 +21,7 @@
 <p align="center">
   <a href="#快速开始">快速开始</a> ·
   <a href="#课程目录">课程目录</a> ·
+  <a href="#番外期--第二期课前培训">番外期</a> ·
   <a href="#学习路线">学习路线</a> ·
   <a href="#后续规划">后续规划</a>
 </p>
@@ -39,6 +40,7 @@
 | 数据 | `yfinance` · `akshare` 免费日线行情 |
 | 第一期 | 4 章（已全部上线） |
 | 第二期 | 4 章（已全部上线） |
+| 番外期 | 第一讲：量化投资入门与完整研究流程（13 页 HTML 培训课件） |
 | 不适合 | 已具备完整回测框架、仅需高级因子参考的读者 |
 
 ---
@@ -73,6 +75,14 @@ jupyter lab
 | 06 | 夏普比率与 Beta | [打开](notebooks/phase2_intro/02_夏普比率与Beta.ipynb) | 风险调整收益、个股相对大盘敏感度 |
 | 07 | 最大回撤与仓位管理 | [打开](notebooks/phase2_intro/03_最大回撤与仓位管理.ipynb) | 回撤测算、仓位与风险承受 |
 | 08 | 多标的组合与相关性 | [打开](notebooks/phase2_intro/04_多标的组合与相关性.ipynb) | 等权组合、相关性矩阵、分散化 |
+
+### 番外期 · 第二期课前培训
+
+| 讲 | 主题 | 课件 | 讲者材料 |
+|:--:|------|------|------|
+| 01 | 量化投资入门与完整研究流程 | [打开 13 页交互式 HTML 课件](extras/lecture-01/index.html) | [完整逐页讲者备注](extras/lecture-01/lecture-notes.md) |
+
+课件可下载后直接在浏览器打开，无需安装依赖或联网。使用左右方向键、空格键或屏幕下方按钮翻页；按 N 查看完整讲者备注，O 打开总览，F 全屏投屏。所有图表数值均标注为模拟教学数据。
 
 ### 配套交互演示
 
@@ -122,6 +132,9 @@ Phase 2（已上线）
 ├── 07 最大回撤与仓位管理
 └── 08 多标的组合与相关性
 
+番外期（已上线）
+└── 第一讲 量化投资入门与完整研究流程 · 13 页 HTML 培训课件
+
 Phase 3（规划）  因子 · 多因子选股
 Phase 4（规划）  机器学习与 AI 量化
 ```
@@ -149,6 +162,8 @@ Quant-for-babies/
 ├── assets/
 │   ├── images/               # README 与传播用配图
 │   └── interactive/          # 独立 HTML 交互演示
+├── extras/
+│   └── lecture-01/           # 番外期第一讲：HTML 幻灯片与逐页讲者备注
 ├── scripts/                  # 配图生成、Notebook 维护脚本
 ├── docs/ROADMAP.md           # 详细路线图
 ├── src/                      # 可复用模块（建设中）

@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1730">
+  <meta name="description" content="番外期第一讲：量化投资入门与完整研究流程。13页互动培训课件，含讲者备注。">
+  <title>番外期 · 第一讲｜量化投资入门与完整研究流程</title>
+  <style>
+    :root { color-scheme: dark; --navy:#0b1730; --navy2:#132342; --ink:#f6f5f0; --muted:#a9b7cb; --teal:#57d9c0; --gold:#e9b86b; --red:#f48d89; --line:#31425e; --panel:#172844; }
+    * { box-sizing:border-box; }
+    html, body { margin:0; min-height:100%; }
+    body { background:#071120; color:var(--ink); font-family:"PingFang SC","Microsoft YaHei",Inter,system-ui,sans-serif; }
+    button, a { -webkit-tap-highlight-color:transparent; }
+    button { font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid var(--gold); outline-offset:3px; }
+    .app { min-height:100dvh; display:flex; flex-direction:column; align-items:center; gap:14px; padding:16px 18px 12px; }
+    .toolbar { width:min(1440px,100%); display:flex; align-items:center; gap:14px; min-height:38px; }
+    .brand { display:flex; gap:10px; align-items:center; text-decoration:none; color:var(--ink); font-size:13px; font-weight:700; letter-spacing:.08em; white-space:nowrap; }
+    .brand-mark { display:grid; place-items:center; width:30px; height:30px; border:1px solid var(--teal); border-radius:8px; color:var(--teal); font-weight:800; letter-spacing:-.06em; }
+    .toolbar-center { margin:auto; color:var(--muted); font-size:12px; letter-spacing:.12em; text-align:center; }
+    .toolbar-actions { display:flex; gap:7px; }
+    .icon-btn { border:1px solid var(--line); background:#12223a; color:var(--ink); border-radius:9px; padding:7px 11px; cursor:pointer; font-size:12px; white-space:nowrap; }
+    .icon-btn:hover { border-color:var(--teal); }
+    .stage { width:min(1440px, calc((100dvh - 112px) * 16 / 9), 100%); aspect-ratio:16/9; position:relative; overflow:hidden; background:var(--navy); border:1px solid #344766; border-radius:12px; box-shadow:0 30px 70px #0008; container-type:inline-size; }
+    .stage::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 83% 15%,#2b526050,transparent 28%),linear-gradient(110deg,transparent 60%,#263a5920); z-index:0; }
+    .slide { display:none; position:absolute; inset:0; padding:4.4cqw 5.2cqw 3.8cqw; flex-direction:column; z-index:1; overflow:hidden; }
+    .slide.active { display:flex; }
+    .slide-head { display:flex; align-items:flex-start; gap:20px; margin-bottom:2.4cqw; }
+    .eyebrow { color:var(--teal); text-transform:uppercase; letter-spacing:.2em; font-size:1.04cqw; font-weight:800; margin-bottom:.7cqw; }
+    .slide h1, .slide h2, .slide h3, .slide p { margin:0; }
+    .slide h1 { font-size:4.7cqw; line-height:1.13; letter-spacing:-.045em; max-width:76%; }
+    .slide h2 { font-size:3.0cqw; line-height:1.22; letter-spacing:-.03em; }
+    .slide h3 { font-size:1.55cqw; line-height:1.32; }
+    .dek { color:var(--muted); font-size:1.32cqw; line-height:1.55; margin-top:.65cqw!important; }
+    .slide-num { margin-left:auto; color:var(--gold); font-size:1.2cqw; font-weight:800; border:1px solid #a87b4588; border-radius:999px; padding:.35cqw .8cqw; white-space:nowrap; }
+    .body-grid { display:grid; gap:1.6cqw; flex:1; min-height:0; }
+    .two { grid-template-columns:1fr 1fr; }
+    .three { grid-template-columns:repeat(3,1fr); }
+    .panel { background:#152643dd; border:1px solid #314660; border-radius:1.15cqw; padding:1.55cqw; min-width:0; }
+    .panel.soft { background:#ffffff0a; }
+    .panel.highlight { border-color:#5cbba8; background:#153b49a8; }
+    .panel.warn { border-color:#b67569; background:#4d30346b; }
+    .panel-label { color:var(--gold); font-size:1.03cqw; letter-spacing:.12em; font-weight:800; margin-bottom:.8cqw; }
+    .panel p, .panel li { font-size:1.23cqw; line-height:1.52; color:#e5eaf0; }
+    .panel ul, .panel ol { margin:.4cqw 0 0; padding-left:1.65cqw; }
+    .panel li+li { margin-top:.37cqw; }
+    .bigline { font-size:2.05cqw!important; line-height:1.35!important; font-weight:750; }
+    .muted { color:var(--muted)!important; }
+    .accent { color:var(--teal)!important; }
+    .gold { color:var(--gold)!important; }
+    .red { color:var(--red)!important; }
+    .mono { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    .kicker { font-size:1.03cqw; color:var(--muted); text-transform:uppercase; letter-spacing:.14em; font-weight:700; }
+    .chip-row { display:flex; flex-wrap:wrap; gap:.6cqw; align-items:center; }
+    .chip { border:1px solid #526480; border-radius:999px; padding:.45cqw .8cqw; color:#dbe5ef; font-size:1.04cqw; white-space:nowrap; }
+    .arrow { color:var(--teal); font-size:1.6cqw; font-weight:800; }
+    .callout { border-left:.35cqw solid var(--teal); padding:.5cqw 1cqw; color:#eef8f7; font-size:1.52cqw; line-height:1.42; background:#2a706730; }
+    .footer-note { margin-top:auto; padding-top:1.0cqw; border-top:1px solid var(--line); display:flex; justify-content:space-between; gap:2cqw; color:var(--muted); font-size:1.0cqw; }
+    .footer-note strong { color:var(--gold); }
+    .metric { font-size:3.6cqw; line-height:1; font-weight:850; letter-spacing:-.05em; }
+    .metric-caption { font-size:1.08cqw; color:var(--muted); margin-top:.5cqw; }
+    .formula { padding:.9cqw 1.1cqw; border:1px solid #517081; border-radius:.8cqw; background:#102a3c; font-family:Georgia,"Times New Roman",serif; font-size:2.0cqw; color:#f5eee0; text-align:center; line-height:1.35; }
+    .formula small { display:block; margin-top:.5cqw; font-family:inherit; font-size:1.05cqw; color:var(--muted); }
+    .step-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.9cqw; }
+    .step { border:1px solid var(--line); border-radius:.85cqw; padding:1cqw; background:#ffffff09; }
+    .step b { color:var(--teal); font-size:1.06cqw; }
+    .step strong { display:block; margin:.35cqw 0; font-size:1.45cqw; }
+    .step span { color:var(--muted); font-size:1.03cqw; line-height:1.35; }
+    .mini-table { width:100%; border-collapse:collapse; font-size:1.05cqw; }
+    .mini-table th { text-align:left; color:var(--muted); font-weight:650; padding:.4cqw .5cqw; border-bottom:1px solid var(--line); }
+    .mini-table td { padding:.37cqw .5cqw; border-bottom:1px solid #ffffff15; }
+    .mini-table tr.mark td { color:var(--teal); font-weight:800; background:#2d786126; }
+    .mini-table tr:last-child td { border-bottom:0; }
+    .chart { width:100%; height:100%; min-height:0; overflow:visible; }
+    svg text { font-family:"PingFang SC","Microsoft YaHei",Inter,system-ui,sans-serif; }
+    .chart-axis { stroke:#8191a466; stroke-width:1; }
+    .chart-grid { stroke:#8191a433; stroke-width:1; stroke-dasharray:5 6; }
+    .chart-label { fill:#b7c3d2; font-size:15px; }
+    .chart-small { fill:#9fb0c6; font-size:12px; }
+    .chart-teal { stroke:var(--teal); fill:none; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+    .chart-gold { stroke:var(--gold); fill:none; stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+    .chart-red { stroke:var(--red); fill:none; stroke-width:3; stroke-dasharray:8 6; stroke-linecap:round; }
+    .cover-layout { display:grid; grid-template-columns:1.15fr .85fr; gap:3.0cqw; flex:1; align-items:center; }
+    .cover-title { font-size:5.7cqw!important; max-width:100%!important; }
+    .cover-sub { font-size:1.65cqw; color:var(--muted); margin-top:1.3cqw!important; line-height:1.45; }
+    .cover-visual { border:1px solid var(--line); border-radius:1.4cqw; padding:2.2cqw; background:linear-gradient(150deg,#173857,#12223d); }
+    .stock-grid { display:grid; grid-template-columns:repeat(10,1fr); gap:.37cqw; }
+    .stock-grid span { height:2.2cqw; border-radius:.22cqw; background:#9bb4cb35; }
+    .stock-grid span:nth-child(7n) { background:#e9b86b9e; }
+    .stock-grid span:nth-child(11n) { background:#57d9c099; }
+    .stock-grid span.selected { background:var(--teal); box-shadow:0 0 18px #57d9c044; }
+    .visual-bottom { display:flex; justify-content:space-between; align-items:center; margin-top:1.3cqw; font-size:1.15cqw; color:var(--muted); }
+    .visual-bottom strong { font-size:2.0cqw; color:var(--teal); }
+    .cover-question { border-left:.35cqw solid var(--gold); padding:.8cqw 1.2cqw; font-size:1.6cqw; line-height:1.45; background:#e9b86b17; margin-top:2.1cqw; }
+    .flowline { display:flex; gap:.7cqw; align-items:center; flex-wrap:wrap; }
+    .flowbox { border:1px solid #4b647c; background:#1a344d; border-radius:.8cqw; padding:.7cqw .85cqw; font-size:1.12cqw; font-weight:700; }
+    .factor-bars { display:flex; align-items:end; height:6cqw; gap:.55cqw; border-bottom:1px solid #7890a5; margin:1cqw .3cqw .5cqw; }
+    .factor-bars i { flex:1; background:linear-gradient(var(--teal),#28786c); border-radius:.25cqw .25cqw 0 0; }
+    .factor-bars i:nth-child(1) { height:30%; }.factor-bars i:nth-child(2) { height:47%; }.factor-bars i:nth-child(3) { height:43%; }.factor-bars i:nth-child(4) { height:69%; }.factor-bars i:nth-child(5) { height:88%; }.factor-bars i:nth-child(6) { height:100%; }
+    .rank-row { display:grid; grid-template-columns:1.8cqw 1fr 3.2cqw; align-items:center; gap:.6cqw; margin:.31cqw 0; font-size:1.02cqw; }
+    .rank-track { height:.7cqw; background:#ffffff16; border-radius:99px; overflow:hidden; }
+    .rank-fill { display:block; height:100%; background:#8ea1b1; border-radius:99px; }
+    .rank-row.pick .rank-fill { background:var(--teal); }
+    .rank-row.pick { color:var(--teal); font-weight:800; }
+    .answer { display:none; color:var(--gold)!important; font-weight:800; margin-top:.6cqw!important; }
+    .answer.visible { display:block; }
+    .reveal { border:1px solid var(--gold); background:#e9b86b18; color:var(--gold); border-radius:.65cqw; padding:.55cqw .8cqw; cursor:pointer; font-size:1.05cqw; margin-top:.7cqw; }
+    .stage-foot { position:absolute; z-index:2; left:5.2cqw; right:5.2cqw; bottom:1.5cqw; height:.3cqw; border-radius:99px; background:#ffffff20; }
+    .stage-foot-fill { height:100%; width:7.69%; border-radius:99px; background:linear-gradient(90deg,var(--gold),var(--teal)); transition:width .25s; }
+    .controls { width:min(1440px,100%); display:flex; align-items:center; gap:12px; color:var(--muted); font-size:12px; }
+    .controls button { border:1px solid var(--line); background:#13233d; color:var(--ink); border-radius:8px; padding:8px 13px; cursor:pointer; }
+    .controls button:hover { border-color:var(--teal); }
+    .controls button:disabled { opacity:.35; cursor:default; }
+    .progress-text { margin:auto; font-variant-numeric:tabular-nums; }
+    .help { white-space:nowrap; }
+    .overlay { display:none; position:fixed; inset:0; z-index:20; background:#05101de9; backdrop-filter:blur(9px); }
+    .overlay.open { display:flex; }
+    .drawer { margin-left:auto; width:min(660px,100%); background:#102038; border-left:1px solid #466078; display:flex; flex-direction:column; height:100%; }
+    .drawer-head { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:18px 22px; border-bottom:1px solid var(--line); }
+    .drawer-head h2 { margin:0; font-size:19px; }
+    .notes-scroll { overflow:auto; padding:20px 27px 45px; font-size:15px; line-height:1.7; color:#dce4ed; }
+    .notes-scroll h2 { font-size:25px; color:#fff; margin:20px 0 7px; }
+    .notes-scroll h3 { font-size:19px; color:var(--teal); margin:18px 0 6px; }
+    .notes-scroll h4 { font-size:16px; color:var(--gold); margin:15px 0 5px; }
+    .notes-scroll p { margin:9px 0; }
+    .notes-scroll table { border-collapse:collapse; display:block; overflow-x:auto; font-size:13px; }
+    .notes-scroll th,.notes-scroll td { padding:6px 9px; border:1px solid var(--line); min-width:75px; }
+    .notes-scroll th { color:var(--gold); }
+    .notes-scroll blockquote { border-left:3px solid var(--gold); margin:14px 0; padding:2px 15px; color:#f3e2c4; }
+    .notes-scroll a { color:var(--teal); }
+    .notes-scroll code { color:#f5c587; }
+    .notes-scroll .math { display:block; overflow:auto; padding:9px; background:#19314a; border-radius:8px; }
+    .overview { width:min(1040px,calc(100% - 32px)); max-height:min(760px,calc(100% - 32px)); margin:auto; background:#102038; border:1px solid #496078; border-radius:15px; display:flex; flex-direction:column; overflow:hidden; }
+    .overview-grid { padding:22px; display:grid; grid-template-columns:repeat(3,1fr); gap:10px; overflow:auto; }
+    .overview-grid button { text-align:left; border:1px solid var(--line); background:#182b47; color:var(--ink); border-radius:9px; padding:16px; cursor:pointer; }
+    .overview-grid button:hover,.overview-grid button.current { border-color:var(--teal); background:#1b3c4e; }
+    .overview-grid b { color:var(--teal); display:block; font-size:12px; margin-bottom:5px; }
+    .overview-grid span { font-size:15px; font-weight:700; }
+    @media (max-width: 900px) {
+      .app { padding:0 0 66px; gap:0; }
+      .toolbar { padding:10px 12px; background:#09172a; }
+      .toolbar-center,.help { display:none; }
+      .toolbar-actions { margin-left:auto; }
+      .stage { width:100%; aspect-ratio:auto; min-height:calc(100dvh - 112px); border:0; border-radius:0; overflow:visible; container-type:normal; }
+      .slide { position:relative; min-height:calc(100dvh - 112px); overflow:visible; padding:30px 20px 52px; }
+      .slide-head { margin-bottom:24px; }
+      .eyebrow,.panel-label,.kicker { font-size:11px; }
+      .slide h1 { font-size:38px; max-width:100%; }
+      .slide h2 { font-size:28px; }
+      .slide h3 { font-size:18px; }
+      .dek { font-size:15px; margin-top:8px!important; }
+      .slide-num { font-size:12px; padding:5px 9px; }
+      .cover-layout,.body-grid.two,.body-grid.three { grid-template-columns:1fr; }
+      .body-grid { gap:12px; }
+      .panel { padding:16px; border-radius:11px; }
+      .panel p,.panel li,.callout,.cover-question { font-size:15px; }
+      .bigline { font-size:21px!important; }
+      .chip,.flowbox,.step b,.step span,.metric-caption { font-size:12px; }
+      .arrow { font-size:18px; }
+      .metric { font-size:38px; }
+      .formula { font-size:21px; padding:13px; }
+      .formula small { font-size:11px; }
+      .step-grid { grid-template-columns:repeat(2,1fr); gap:8px; }
+      .step { padding:10px; }
+      .step strong { font-size:15px; }
+      .mini-table { font-size:12px; }
+      .mini-table th,.mini-table td { padding:5px 4px; }
+      .chart { min-height:200px; max-height:290px; }
+      .cover-title { font-size:43px!important; }
+      .cover-sub { font-size:17px; }
+      .cover-visual { padding:20px; border-radius:12px; }
+      .stock-grid { gap:4px; }.stock-grid span { height:19px; }
+      .visual-bottom { font-size:13px; }.visual-bottom strong { font-size:22px; }
+      .cover-question { margin-top:18px; padding:12px; }
+      .factor-bars { height:90px; }
+      .rank-row { grid-template-columns:22px 1fr 40px; gap:8px; font-size:12px; margin:4px 0; }.rank-track { height:8px; }
+      .reveal { font-size:12px; padding:7px 10px; }
+      .footer-note { font-size:11px; margin-top:18px; }
+      .stage-foot { left:20px; right:20px; bottom:20px; height:4px; }
+      .controls { position:fixed; bottom:0; padding:9px 12px; background:#09172a; z-index:10; }
+      .controls button { padding:8px 12px; }
+      .overview-grid { grid-template-columns:1fr; }
+    }
+    @media (max-width: 520px) { .toolbar-actions .icon-btn { padding:7px 8px; }.brand { font-size:11px; }.brand-mark { width:26px; height:26px; }.slide h1 { font-size:32px; }.slide h2 { font-size:25px; }.step-grid { grid-template-columns:1fr 1fr; } }
+    @media print { body { background:#fff; }.app,.stage { display:block; padding:0; margin:0; width:100%; height:auto; border:0; box-shadow:none; }.toolbar,.controls,.stage-foot,.overlay { display:none!important; }.slide,.slide.active { display:flex; position:relative; width:100%; height:100vh; page-break-after:always; break-after:page; -webkit-print-color-adjust:exact; print-color-adjust:exact; }.stage { overflow:visible; } }
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="toolbar">
+    <a class="brand" href="../../README.md" aria-label="返回仓库课程目录"><span class="brand-mark">Q</span><span>QUANT FOR BABIES</span></a>
+    <div class="toolbar-center">番外期 · 第一讲 / QUANTITATIVE RESEARCH FUNDAMENTALS</div>
+    <div class="toolbar-actions">
+      <button class="icon-btn" id="overviewBtn" type="button" aria-label="打开页面总览">☷ 总览</button>
+      <button class="icon-btn" id="notesBtn" type="button" aria-label="打开讲者备注">✎ 备注</button>
+      <button class="icon-btn" id="fullscreenBtn" type="button" aria-label="切换全屏">⛶ 全屏</button>
+    </div>
+  </header>
+  <main class="stage" id="stage" aria-live="polite">
+    <section class="slide active" data-title="封面与课程目标" aria-label="第1页，封面与课程目标">
+      <div class="eyebrow">PPT 01 · 第二期课前培训 · 第一讲</div>
+      <div class="cover-layout">
+        <div>
+          <h1 class="cover-title">从股票数据<br>到投资策略<span class="accent">.</span></h1>
+          <p class="cover-sub">量化投资入门与完整研究流程<br><span class="muted">From Financial Data to Quantitative Investment Strategies</span></p>
+          <div class="cover-question"><strong>开场问题</strong><br>给你100只A股过去5年的数据，如何选出下个月最值得持有的10只？</div>
+        </div>
+        <div class="cover-visual" aria-label="100只股票筛选出10只的示意图">
+          <div class="kicker">100 STOCKS · 5 YEARS</div>
+          <div class="stock-grid" id="stockGrid" style="margin-top:1.4cqw"></div>
+          <div class="visual-bottom"><span>数据 → 假设 → 检验 → 组合</span><strong>TOP 10</strong></div>
+        </div>
+      </div>
+      <div class="footer-note"><span>本讲目标：概念 · 收益与风险 · 因子到组合 · 回测严谨性</span><strong>建议用时 3 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="什么是量化投资？" aria-label="第2页，什么是量化投资">
+      <div class="slide-head"><div><div class="eyebrow">01 / 建立概念</div><h2>把投资思想，写成可验证的规则</h2><p class="dek">用金融数据、统计方法与程序，辅助选股、组合、风险管理和交易执行。</p></div><div class="slide-num">02 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="panel-label">主观选股</div><p class="bigline">“我认为这家公司发展很好，所以可以买入。”</p><div class="flowline" style="margin-top:1.7cqw"><span class="flowbox">观察公司</span><span class="arrow">→</span><span class="flowbox">形成判断</span><span class="arrow">→</span><span class="flowbox">买入</span></div><p class="muted" style="margin-top:1.5cqw">依赖研究判断与经验；复盘时需辨别主观偏见。</p></div>
+        <div class="panel highlight"><div class="panel-label">规则化选股</div><p class="bigline">“按20日动量、波动率和换手率评分，选前10只。”</p><div class="flowline" style="margin-top:1.7cqw"><span class="flowbox">定义指标</span><span class="arrow">→</span><span class="flowbox">计算排名</span><span class="arrow">→</span><span class="flowbox">回测验证</span></div><p class="muted" style="margin-top:1.5cqw">相同输入和规则下可复现；仍需警惕数据偏差、过拟合和模型失效。</p></div>
+      </div>
+      <div class="footer-note"><span>量化不等于AI猜涨跌，也不保证盈利；研究假设和风控仍需要人判断。</span><strong>建议用时 4 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="量化研究员在做什么？" aria-label="第3页，量化研究员在做什么">
+      <div class="slide-head"><div><div class="eyebrow">02 / 研究岗位</div><h2>研究员的工作：让假设接受检验</h2><p class="dek">问题示例：近期涨得多的股票，未来是否更容易继续上涨？</p></div><div class="slide-num">03 / 13</div></div>
+      <div class="step-grid" style="flex:1">
+        <div class="step"><b>01 · 提出假设</b><strong>动量信号</strong><span>寻找可能预测未来收益的金融逻辑。</span></div>
+        <div class="step"><b>02 · 研究数据</b><strong>获取与清洗</strong><span>检查价格、成交量、财务数据的可靠性。</span></div>
+        <div class="step"><b>03 · 计算因子</b><strong>量化特征</strong><span>把“近期涨幅”写成可重复计算的指标。</span></div>
+        <div class="step"><b>04 · 检验关系</b><strong>统计证据</strong><span>比较因子与后续收益，检查稳定性。</span></div>
+        <div class="step"><b>05 · 构建组合</b><strong>信号到持仓</strong><span>把多个信号转换为排名、股票权重。</span></div>
+        <div class="step"><b>06 · 回测复盘</b><strong>收益与风险</strong><span>模拟交易、计入成本，再解释成败。</span></div>
+      </div>
+      <div class="footer-note"><span>QR重假设与模型；QD重工具与系统；数据工程师重数据可靠性。实际工作会协作重叠。</span><strong>建议用时 4 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="量化研究的六步流程" aria-label="第4页，量化研究的六步流程">
+      <div class="slide-head"><div><div class="eyebrow">03 / 研究框架</div><h2>数据 → 因子 → 检验 → 策略 → 回测 → 报告</h2><p class="dek">每一步的输出，都是下一步的输入；任何数据错误都会沿研究链传播。</p></div><div class="slide-num">04 / 13</div></div>
+      <div class="step-grid" style="flex:1">
+        <div class="step"><b>INPUT 01</b><strong>数据工程</strong><span>行情/交易规则 → 清洗后的历史样本<br>Python · AkShare · pandas · SQLite · SQL</span></div>
+        <div class="step"><b>OUTPUT 02</b><strong>因子计算</strong><span>历史样本 → 每只股票每期的因子值<br>NumPy · pandas Rolling</span></div>
+        <div class="step"><b>EVIDENCE 03</b><strong>因子检验</strong><span>因子 + 后续收益 → 预测关系证据<br>Spearman · Rank IC · ICIR</span></div>
+        <div class="step"><b>RULES 04</b><strong>策略构建</strong><span>因子证据 → 标准化评分与目标持仓<br>Z-score · 等权合成 · Top N</span></div>
+        <div class="step"><b>SIMULATE 05</b><strong>策略回测</strong><span>目标持仓 + 交易约束 → 收益风险曲线<br>月度调仓 · 夏普 · 最大回撤</span></div>
+        <div class="step"><b>EXPLAIN 06</b><strong>研究报告</strong><span>实验结果 → 图表、对照与结论<br>样本外验证 · 对照实验</span></div>
+      </div>
+      <div class="footer-note"><span>研究是持续迭代：提出假设 → 实验验证 → 发现问题 → 修正方法。</span><strong>建议用时 5 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="A股市场基本交易知识" aria-label="第5页，A股市场基本交易知识">
+      <div class="slide-head"><div><div class="eyebrow">04 / 市场基础</div><h2>交易制度决定回测能否落地</h2><p class="dek">A股日行情包括股票代码、OHLC价格、成交量、成交额与换手率。</p></div><div class="slide-num">05 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="panel-label">OHLCV · 一天的价格与成交</div>
+          <svg class="chart" viewBox="0 0 510 220" role="img" aria-label="模拟OHLC蜡烛图，标记开盘、最高、最低、收盘">
+            <line class="chart-grid" x1="30" y1="48" x2="480" y2="48"/><line class="chart-grid" x1="30" y1="110" x2="480" y2="110"/><line class="chart-grid" x1="30" y1="175" x2="480" y2="175"/>
+            <line x1="250" y1="27" x2="250" y2="185" stroke="#57d9c0" stroke-width="5"/><rect x="224" y="70" width="52" height="76" rx="4" fill="#57d9c0"/>
+            <line x1="280" y1="28" x2="360" y2="28" stroke="#e9b86b" stroke-width="2"/><text x="368" y="33" class="chart-label">High 最高</text>
+            <line x1="277" y1="70" x2="358" y2="70" stroke="#e9b86b" stroke-width="2"/><text x="368" y="75" class="chart-label">Close 收盘</text>
+            <line x1="222" y1="146" x2="140" y2="146" stroke="#e9b86b" stroke-width="2"/><text x="26" y="151" class="chart-label">Open 开盘</text>
+            <line x1="280" y1="185" x2="360" y2="185" stroke="#e9b86b" stroke-width="2"/><text x="368" y="190" class="chart-label">Low 最低</text>
+          </svg>
+          <p class="muted">Volume = 成交股数；Amount = 成交金额；换手率 ≈ 成交股数 / 流通股本（具体口径看数据源）。</p>
+        </div>
+        <div class="panel"><div class="panel-label">必须进入交易模拟的约束</div><div class="chip-row"><span class="chip">T+1</span><span class="chip">主板常规 ±10%</span><span class="chip">科创/创业板常规 ±20%</span><span class="chip">停牌</span><span class="chip">交易日历</span><span class="chip">费用与滑点</span></div><p style="margin-top:1.4cqw">分红送股会造成机械价格变化，跨期收益研究要核对复权或总收益口径。</p><div class="callout" style="margin-top:1.3cqw">收盘后出现买入信号，次日涨停无法成交：不能假设订单必然执行。</div></div>
+      </div>
+      <div class="footer-note"><span>历史规则要按当时日期处理：2026-07-06起沪深主板风险警示股票日涨跌幅改为10%。</span><strong>建议用时 6 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="收益率究竟是什么？" aria-label="第6页，收益率究竟是什么">
+      <div class="slide-head"><div><div class="eyebrow">05 / 数学直觉</div><h2>收益率描述相对变化，跨期必须复利</h2><p class="dek">简单收益率只计价格时，尚未纳入分红和交易成本。</p></div><div class="slide-num">06 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="formula">r<sub>t</sub> = (P<sub>t</sub> − P<sub>t−1</sub>) / P<sub>t−1</sub><small>P<sub>t</sub> 当前价格 · P<sub>t−1</sub> 上期价格</small></div><div style="display:flex; gap:1cqw; margin-top:1.25cqw"><div><div class="metric accent">+5%</div><div class="metric-caption">100元 → 105元</div></div><div><div class="metric gold">+2.9%</div><div class="metric-caption">再跌2% → 102.9元</div></div></div><div class="formula" style="margin-top:1.2cqw;font-size:1.55cqw">R<sub>cum</sub> = ∏<sub>t=1…T</sub>(1 + r<sub>t</sub>) − 1</div></div>
+        <div class="panel"><div class="panel-label">模拟价格路径 · 单位：元</div><svg class="chart" viewBox="0 0 520 240" role="img" aria-label="模拟价格从100元升至105元后降至102.9元的折线图"><line class="chart-grid" x1="45" y1="50" x2="490" y2="50"/><line class="chart-grid" x1="45" y1="130" x2="490" y2="130"/><line class="chart-grid" x1="45" y1="205" x2="490" y2="205"/><text x="8" y="55" class="chart-small">105</text><text x="8" y="135" class="chart-small">102</text><text x="8" y="210" class="chart-small">100</text><path class="chart-teal" d="M65 205 L255 50 L455 105"/><circle cx="65" cy="205" r="6" fill="#57d9c0"/><circle cx="255" cy="50" r="6" fill="#57d9c0"/><circle cx="455" cy="105" r="6" fill="#57d9c0"/><text x="43" y="231" class="chart-label">初始</text><text x="232" y="231" class="chart-label">第1期</text><text x="434" y="231" class="chart-label">第2期</text></svg></div>
+      </div>
+      <div class="footer-note"><span>收益率还用于动量、波动率、未来收益标签、净值、夏普与回撤。<button class="reveal" data-target="answer6" type="button">思考：+20%后−20%？</button><span class="answer" id="answer6">答案：1.2 × 0.8 − 1 = −4%</span></span><strong>建议用时 5 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="Alpha、Beta和Benchmark" aria-label="第7页，Alpha、Beta和Benchmark">
+      <div class="slide-head"><div><div class="eyebrow">06 / 收益与风险</div><h2>赚钱、跑赢基准、创造Alpha，是三层判断</h2><p class="dek">策略收益+12%，同期合适基准+16%：简单相对收益是−4个百分点。</p></div><div class="slide-num">07 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="panel-label">假设净值 · 策略 vs 基准</div><svg class="chart" viewBox="0 0 520 260" role="img" aria-label="假设策略增长12%，基准增长16%的净值曲线"><line class="chart-grid" x1="50" y1="30" x2="490" y2="30"/><line class="chart-grid" x1="50" y1="120" x2="490" y2="120"/><line class="chart-grid" x1="50" y1="220" x2="490" y2="220"/><text x="7" y="34" class="chart-small">1.16</text><text x="7" y="224" class="chart-small">1.00</text><path class="chart-gold" d="M50 220 L150 175 L260 135 L360 90 L480 30"/><path class="chart-teal" d="M50 220 L150 185 L260 155 L360 145 L480 80"/><text x="360" y="31" class="chart-label" fill="#e9b86b">基准 +16%</text><text x="363" y="107" class="chart-label" fill="#57d9c0">策略 +12%</text></svg><p class="muted">基准要匹配股票池与风险特征，不能默认所有A股策略都用沪深300。</p></div>
+        <div class="panel"><div class="panel-label">三个概念</div><p><strong class="gold">Benchmark</strong>：业绩比较基准，评价相对表现。</p><p style="margin-top:1cqw"><strong class="accent">Beta β</strong>：对市场波动的历史线性敏感度。</p><div class="formula" style="font-size:1.45cqw;margin-top:.8cqw">β = Cov(R<sub>p</sub>, R<sub>m</sub>) / Var(R<sub>m</sub>)</div><p style="margin-top:1cqw"><strong class="gold">Alpha α</strong>：控制市场风险后的模型截距，非简单收益差。</p><div class="formula" style="font-size:1.3cqw;margin-top:.8cqw">R<sub>p</sub> − R<sub>f</sub> = α + β(R<sub>m</sub> − R<sub>f</sub>) + ε</div></div>
+      </div>
+      <div class="footer-note"><span>β≈1、β&gt;1、0&lt;β&lt;1分别表示接近、更高、更低的历史市场敏感度；并非固定比例预测。</span><strong>建议用时 5 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="什么是股票因子？" aria-label="第8页，什么是股票因子">
+      <div class="slide-head"><div><div class="eyebrow">07 / 因子入门</div><h2>因子是股票特征的可计算刻度</h2><p class="dek">它可以描述风险或收益差异；是否预测未来，仍要用数据检验。</p></div><div class="slide-num">08 / 13</div></div>
+      <div class="body-grid three">
+        <div class="panel"><div class="panel-label">MOMENTUM / 动量</div><h3>过去20日收益</h3><div class="factor-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>近期上涨较多，未来会继续表现较好吗？</p></div>
+        <div class="panel"><div class="panel-label">VOLATILITY / 波动率</div><h3>过去20日日收益波动</h3><svg class="chart" viewBox="0 0 300 115" role="img" aria-label="高低波动两条模拟价格路径"><path class="chart-teal" d="M10 78 L60 68 L110 72 L160 61 L210 54 L280 48"/><path class="chart-gold" d="M10 90 L60 20 L110 84 L160 28 L210 95 L280 37"/></svg><p>高波动与低波动的后续收益有系统差异吗？</p></div>
+        <div class="panel"><div class="panel-label">TURNOVER / 换手率</div><h3>近期交易活跃度</h3><div class="factor-bars"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>交易越活跃，后续收益是否不同？</p></div>
+      </div>
+      <div class="footer-note"><span>常见还有价值、质量、风险、流动性因子。因子≠策略、因子≠预测结果、方向需检验。</span><strong>建议用时 5 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="因子与未来收益的关系" aria-label="第9页，因子与未来收益的关系">
+      <div class="slide-head"><div><div class="eyebrow">08 / 时间顺序</div><h2>只能用已知特征，检验未知的未来</h2><p class="dek">在T日收盘形成信号；后续收益只用于事后评价，实际持有期需从可执行交易时点开始。</p></div><div class="slide-num">09 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="panel-label">信息时间轴</div><div class="flowline" style="margin:1.5cqw 0 2cqw"><span class="flowbox">T−20 至 T<br>过去行情</span><span class="arrow">→</span><span class="flowbox">T日收盘<br>因子 X</span><span class="arrow">→</span><span class="flowbox">未来20日<br>收益 Y</span></div><div class="callout">X 是当时已经可见的特征；Y 是事后才能知道的标签。</div><p style="margin-top:1.6cqw">相关性不代表因果性；有预测关系，也不代表某只股票必然上涨。</p></div>
+        <div class="panel"><div class="panel-label">模拟教学数据 · 非真实A股</div><table class="mini-table"><thead><tr><th>股票</th><th>当前动量 X</th><th>后续20日收益 Y</th></tr></thead><tbody><tr><td>A</td><td>+15%</td><td>+8%</td></tr><tr><td>B</td><td>+10%</td><td>+5%</td></tr><tr><td>C</td><td>+4%</td><td>+1%</td></tr><tr><td>D</td><td>−3%</td><td>−2%</td></tr><tr><td>E</td><td>−8%</td><td>−6%</td></tr></tbody></table><p style="margin-top:1cqw">一次五只股票的观察远远不够：还要看更多股票、更多时期、稳定性与扣成本后的收益。</p></div>
+      </div>
+      <div class="footer-note"><span>后续第四讲：Rank IC、ICIR、分组收益检验。</span><strong>建议用时 5 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="从因子到股票组合" aria-label="第10页，从因子到股票组合">
+      <div class="slide-head"><div><div class="eyebrow">09 / 组合构建</div><h2>评分 → 排名 → Top N → 等权持仓</h2><p class="dek">课堂模拟：10只股票中选出得分最高的E、A、C三只。</p></div><div class="slide-num">10 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="panel-label">模拟综合得分排名</div>
+          <div class="rank-row pick"><b>E</b><div class="rank-track"><i class="rank-fill" style="width:100%"></i></div><span>1.60</span></div>
+          <div class="rank-row pick"><b>A</b><div class="rank-track"><i class="rank-fill" style="width:84%"></i></div><span>1.20</span></div>
+          <div class="rank-row pick"><b>C</b><div class="rank-track"><i class="rank-fill" style="width:72%"></i></div><span>0.90</span></div>
+          <div class="rank-row"><b>I</b><div class="rank-track"><i class="rank-fill" style="width:63%"></i></div><span>0.70</span></div>
+          <div class="rank-row"><b>G</b><div class="rank-track"><i class="rank-fill" style="width:51%"></i></div><span>0.40</span></div>
+          <div class="rank-row"><b>D</b><div class="rank-track"><i class="rank-fill" style="width:40%"></i></div><span>0.10</span></div>
+          <div class="rank-row"><b>J</b><div class="rank-track"><i class="rank-fill" style="width:36%"></i></div><span>0.00</span></div>
+          <div class="rank-row"><b>F</b><div class="rank-track"><i class="rank-fill" style="width:29%"></i></div><span>−0.20</span></div>
+          <div class="rank-row"><b>B</b><div class="rank-track"><i class="rank-fill" style="width:18%"></i></div><span>−0.50</span></div>
+          <div class="rank-row"><b>H</b><div class="rank-track"><i class="rank-fill" style="width:3%"></i></div><span>−0.90</span></div>
+        </div>
+        <div class="panel highlight"><div class="panel-label">目标组合 · 等权</div><div class="metric accent">33.33%</div><div class="metric-caption">每只股票的目标权重 wᵢ = 1 / 3</div><div class="flowline" style="margin:1.8cqw 0"><span class="flowbox">E · 1/3</span><span class="flowbox">A · 1/3</span><span class="flowbox">C · 1/3</span></div><p>每月按预设时间重新计算因子、排名和目标持仓。实际权重会受成交价格、余额和费用影响。</p></div>
+      </div>
+      <div class="footer-note"><span>正式策略还要处理MAD去极值、Z-score、因子方向与合成；在第三、五讲展开。</span><strong>建议用时 4 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="为什么需要回测？" aria-label="第11页，为什么需要回测">
+      <div class="slide-head"><div><div class="eyebrow">10 / 策略验证</div><h2>回测检验历史表现、风险与可交易性</h2><p class="dek">净值最终上涨，不代表过程没有亏损；历史表现也不能保证未来收益。</p></div><div class="slide-num">11 / 13</div></div>
+      <div class="body-grid two">
+        <div class="panel"><div class="panel-label">模拟策略净值 · 初始1.00</div><svg class="chart" viewBox="0 0 520 260" role="img" aria-label="模拟净值依次为1.00、1.04、1.01、1.08的折线图"><line class="chart-grid" x1="45" y1="45" x2="490" y2="45"/><line class="chart-grid" x1="45" y1="130" x2="490" y2="130"/><line class="chart-grid" x1="45" y1="220" x2="490" y2="220"/><text x="5" y="49" class="chart-small">1.08</text><text x="5" y="134" class="chart-small">1.04</text><text x="5" y="224" class="chart-small">1.00</text><path class="chart-teal" d="M55 220 L190 130 L330 195 L465 45"/><circle cx="55" cy="220" r="6" fill="#57d9c0"/><circle cx="190" cy="130" r="6" fill="#57d9c0"/><circle cx="330" cy="195" r="6" fill="#f48d89"/><circle cx="465" cy="45" r="6" fill="#57d9c0"/><text x="240" y="173" class="chart-label" fill="#f48d89">回撤约−2.88%</text><text x="44" y="247" class="chart-small">初始</text><text x="177" y="247" class="chart-small">第1期</text><text x="317" y="247" class="chart-small">第2期</text><text x="452" y="247" class="chart-small">第3期</text></svg></div>
+        <div class="panel"><div class="formula" style="font-size:1.55cqw">NAV<sub>t</sub> = NAV<sub>t−1</sub> × (1 + R<sub>t</sub>)</div><p style="margin-top:1.1cqw"><strong class="accent">净值曲线</strong>：累计表现。</p><p style="margin-top:.8cqw"><strong class="gold">最大回撤</strong>：相对先前高点的最大跌幅。</p><p style="margin-top:.8cqw"><strong class="red">夏普比率</strong>：单位波动风险对应的超额收益。</p><div class="callout" style="margin-top:1.2cqw">问四件事：收益、风险、成本、跨时期稳定性。</div></div>
+      </div>
+      <div class="footer-note"><span>还要检查滑点、换手、停牌、涨跌停、参数选择与过拟合。高收益配50%回撤还优秀吗？</span><strong>建议用时 4 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="三个最危险的研究错误" aria-label="第12页，三个最危险的研究错误">
+      <div class="slide-head"><div><div class="eyebrow">11 / 科研规范</div><h2>三个偏差，会让漂亮回测失去可信度</h2><p class="dek">错误并不一定使收益变高，但会破坏结论的可靠性。</p></div><div class="slide-num">12 / 13</div></div>
+      <div class="body-grid three">
+        <div class="panel warn"><div class="panel-label">01 · 前视偏差</div><h3>提前使用未来信息</h3><p style="margin-top:1.1cqw"><strong class="red">错误</strong>：T日收盘后算出信号，却假设已按T日收盘价买入。</p><p style="margin-top:1.1cqw"><strong class="accent">修复</strong>：记录信息可见时点，下一可交易时点执行。</p></div>
+        <div class="panel warn"><div class="panel-label">02 · 幸存者偏差</div><h3>只看最终留下的股票</h3><p style="margin-top:1.1cqw"><strong class="red">错误</strong>：用2026年沪深300成分，直接回测2020年。</p><p style="margin-top:1.1cqw"><strong class="accent">修复</strong>：按历史时点还原股票池、停牌与退市状态。</p></div>
+        <div class="panel warn"><div class="panel-label">03 · 忽略交易成本</div><h3>假设交易免费且必成交</h3><p style="margin-top:1.1cqw"><strong class="red">错误</strong>：高频调仓只报毛收益，不扣费用、税和滑点。</p><p style="margin-top:1.1cqw"><strong class="accent">修复</strong>：合理模拟成交条件，报告扣费后的净收益。</p></div>
+      </div>
+      <div class="footer-note"><span>研究原则：信息当时已知 · 样本符合历史 · 收益计入交易摩擦。</span><strong>建议用时 5 分钟</strong></div>
+    </section>
+
+    <section class="slide" data-title="研究问题与课堂总结" aria-label="第13页，研究问题与课堂总结">
+      <div class="slide-head"><div><div class="eyebrow">12 / 总结与衔接</div><h2>用可复现的实验，回答三个研究问题</h2><p class="dek">H1–H3是待检验的假设，不是已经得到的结论。</p></div><div class="slide-num">13 / 13</div></div>
+      <div class="body-grid three">
+        <div class="panel"><div class="panel-label">H1 · 预测能力</div><h3>量价因子与未来收益有关吗？</h3><p style="margin-top:1cqw">Rank IC · ICIR · 分组收益</p></div>
+        <div class="panel"><div class="panel-label">H2 · 组合优势</div><h3>静态多因子样本外能胜过部分单因子吗？</h3><p style="margin-top:1cqw">单因子 vs 多因子对照回测</p></div>
+        <div class="panel"><div class="panel-label">H3 · 成本影响</div><h3>扣除交易成本后，结果如何变化？</h3><p style="margin-top:1cqw">毛/净收益 · 成本敏感性</p></div>
+      </div>
+      <div class="panel soft" style="margin-top:1cqw"><div class="panel-label">课堂检查 · 口头回答</div><div class="chip-row"><span class="chip">100只股票选10只：研究步骤？</span><span class="chip">高动量能保证上涨吗？</span><span class="chip">漂亮净值曲线要检查什么？</span></div><p style="margin-top:.8cqw">后续四讲：数据工程 → 因子计算 → 因子检验 → 多因子回测与研究报告。</p></div>
+      <div class="footer-note"><span>最终交付：A股SQLite数据库、三因子有效性分析、策略回测、实证报告与个人答辩。</span><strong>建议用时 4 分钟</strong></div>
+    </section>
+    <div class="stage-foot" aria-hidden="true"><div class="stage-foot-fill" id="stageProgress"></div></div>
+  </main>
+  <footer class="controls"><button id="prevBtn" type="button" aria-label="上一页">← 上一页</button><button id="nextBtn" type="button" aria-label="下一页">下一页 →</button><span class="progress-text" id="pageCount">01 / 13</span><span class="help">← → / Space 翻页 · N 备注 · O 总览 · F 全屏</span></footer>
+</div>
+
+<div class="overlay" id="notesOverlay" role="dialog" aria-modal="true" aria-label="讲者备注"><div class="drawer"><div class="drawer-head"><h2 id="notesTitle">讲者备注</h2><button class="icon-btn" data-close="notesOverlay" type="button">关闭 ✕</button></div><div class="notes-scroll" id="notesBody"></div></div></div>
+<div class="overlay" id="overviewOverlay" role="dialog" aria-modal="true" aria-label="页面总览"><div class="overview"><div class="drawer-head"><h2>13页课程总览</h2><button class="icon-btn" data-close="overviewOverlay" type="button">关闭 ✕</button></div><div class="overview-grid" id="overviewGrid"></div></div></div>
+
+<script id="notesData" type="application/json">["<h2>P01｜封面与课程目标<\/h2>\n<p>建议用时：3分钟<\/p>\n<h2>从股票数据到投资策略<\/h2>\n<p>量化投资入门与完整研究流程<\/p>\n<p>From Financial Data to Quantitative Investment Strategies<\/p>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>本课程是《A股多因子量化选股与回测研究》的第一讲，旨在帮助大家建立量化金融的基本认知，理解一个量化研究员如何从金融数据中提出投资假设，并通过统计检验与策略回测验证其有效性。<\/p>\n<p><strong>本讲学习目标<\/strong><\/p>\n<ol>\n<li>认识量化投资的基本概念与研究流程。<\/li>\n<li>理解股票收益率、风险、Alpha、Beta与因子。<\/li>\n<li>掌握从因子信号到投资组合的基本逻辑。<\/li>\n<li>初步认识回测偏差与量化研究的严谨性。<\/li>\n<\/ol>\n<p><strong>课堂开场问题：<\/strong><\/p>\n<blockquote>\n<p>假设现在给你100只A股股票过去5年的行情数据，你需要选出下个月最值得持有的10只股票，你会怎么做？<\/p>\n<\/blockquote>\n<p><strong>授课提示：<\/strong><\/p>\n<p>先让大家自由提出选股方法，例如看涨跌幅、财报、成交量、行业，或者使用AI预测。随后告诉他们：<\/p>\n<p>“接下来的课程，我们就是尝试把这些直觉转换成可以计算、验证和复现的投资规则。”<\/p>\n<p><strong>排版建议：<\/strong> 大标题居左，右侧展示股票行情矩阵与投资组合图；开场问题作为页面下方最醒目的文字。<\/p>\n<hr />", "<h2>P02｜什么是量化投资？<\/h2>\n<p>建议用时：4分钟<\/p>\n<h3>量化投资：用数据、数学模型与规则辅助投资决策<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>量化投资（Quantitative Investing）是指利用金融数据、数学统计方法和计算机程序，将投资思想转化为可执行、可检验的规则，并应用于证券选择、投资组合构建、风险管理及交易执行的投资方式。<\/p>\n<p>它的核心不是预测每一次价格涨跌，而是<strong>用系统化的方法识别可能存在的统计规律，并检验这些规律能否转化为有价值的投资策略。<\/strong><\/p>\n<h3>主观投资与量化投资的区别<\/h3>\n<table>\n<thead>\n<tr>\n<th>对比维度<\/th>\n<th>主观投资<\/th>\n<th>量化投资<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>选股依据<\/td>\n<td>研究判断、经验、投资逻辑<\/td>\n<td>预先定义的数据指标与规则<\/td>\n<\/tr>\n<tr>\n<td>决策方式<\/td>\n<td>人为综合判断<\/td>\n<td>模型计算与系统执行<\/td>\n<\/tr>\n<tr>\n<td>一致性<\/td>\n<td>可能随判断变化<\/td>\n<td>相同输入和规则下结果可复现<\/td>\n<\/tr>\n<tr>\n<td>验证方式<\/td>\n<td>基本面跟踪、投资复盘等<\/td>\n<td>统计检验、回测、样本外验证<\/td>\n<\/tr>\n<tr>\n<td>典型风险<\/td>\n<td>主观偏见、判断偏差<\/td>\n<td>数据偏差、模型失效、过拟合<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<p><strong>示例：<\/strong><\/p>\n<p>主观选股：<\/p>\n<p>“我认为这家公司未来发展很好，所以可以买入。”<\/p>\n<p>量化选股：<\/p>\n<p>“我定义了一套筛选条件，将股票按照过去20日动量、波动率和换手率评分，选择综合排名前10的股票。”<\/p>\n<h3>必须强调的三个观点<\/h3>\n<ul>\n<li>量化投资不等于人工智能预测股票。<\/li>\n<li>量化投资不意味着能够保证盈利。<\/li>\n<li>量化模型可以规则化，但研究假设、因子选择与风险控制依然需要人的判断。<\/li>\n<\/ul>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>量化与主观投资并非完全对立。例如基本面研究员可以提出某种投资逻辑，量化研究员再将其转化成可检验的数据指标。<\/p>\n<p><strong>排版建议：<\/strong> 左右双栏展示“主观决策”和“量化决策”，底部突出一句话：<\/p>\n<p><strong>量化的核心是将投资思想转化为可验证的规则，而不是让计算机替我们猜价格。<\/strong><\/p>\n<hr />", "<h2>P03｜量化研究员在做什么？<\/h2>\n<p>建议用时：4分钟<\/p>\n<h3>量化研究员的核心工作：从数据中寻找可以被验证的投资信号<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>量化研究员（Quantitative Researcher）运用统计学、数学、计算机科学和金融知识，研究金融市场中可能存在的规律，并尝试构建具有预测价值或风险管理价值的模型。<\/p>\n<p>典型工作包括：<\/p>\n<table>\n<thead>\n<tr>\n<th>工作内容<\/th>\n<th>实际研究任务<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>金融数据研究<\/td>\n<td>获取、清洗股票价格、成交量与财务数据<\/td>\n<\/tr>\n<tr>\n<td>Alpha信号研究<\/td>\n<td>提出可能预测未来收益的投资假设<\/td>\n<\/tr>\n<tr>\n<td>因子分析<\/td>\n<td>计算因子，检验其与未来收益的关系<\/td>\n<\/tr>\n<tr>\n<td>投资组合构建<\/td>\n<td>将多个信号转换成股票权重与持仓<\/td>\n<\/tr>\n<tr>\n<td>策略回测<\/td>\n<td>模拟历史投资，计算收益、风险和交易成本<\/td>\n<\/tr>\n<tr>\n<td>研究复盘<\/td>\n<td>分析策略失效原因，改进假设与实验方法<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<h3>用一个真实工作场景解释<\/h3>\n<p>假设研究员发现：<\/p>\n<p>“近期涨幅较大的股票，未来一段时间是否更容易继续上涨？”<\/p>\n<p>他可能会依次开展以下工作：<\/p>\n<p>提出动量假设<\/p>\n<p>获取历史行情<\/p>\n<p>计算动量因子<\/p>\n<p>形成研究结论<\/p>\n<p>模拟组合收益<\/p>\n<p>检验预测能力<\/p>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>可以补充量化研究员（QR）、量化开发工程师（QD）与量化数据工程师之间的区别：研究员更关注假设与模型，开发工程师更关注研究工具和系统实现，数据工程师更关注数据的可靠性。但实际机构中这些职责经常互相协作，甚至有所重叠。<\/p>\n<p>我们的第二期项目会让大家接触整个过程，而不是只学习其中一个岗位的操作。<\/p>\n<p><strong>排版建议：<\/strong> 以“研究员的一天”作为视觉主题，使用工作流图和时间轴，减少大段文字。<\/p>\n<hr />", "<h2>P04｜量化研究的六步完整流程<\/h2>\n<p>建议用时：5分钟<\/p>\n<h3>一个完整的量化策略，不止需要算法，还需要完整的研究证据链<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>我们本期采用六阶段研究方法：<\/p>\n<h3>每一步在本项目中具体做什么？<\/h3>\n<table>\n<thead>\n<tr>\n<th>阶段<\/th>\n<th>我们会使用的主要技术<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>数据工程<\/td>\n<td>Python、AkShare、pandas、SQLite、SQL<\/td>\n<\/tr>\n<tr>\n<td>因子计算<\/td>\n<td>NumPy、pandas Rolling<\/td>\n<\/tr>\n<tr>\n<td>因子检验<\/td>\n<td>Spearman相关系数、Rank IC、ICIR<\/td>\n<\/tr>\n<tr>\n<td>策略构建<\/td>\n<td>Z-score、因子等权合成、Top N<\/td>\n<\/tr>\n<tr>\n<td>策略回测<\/td>\n<td>月度调仓、组合收益、夏普、最大回撤<\/td>\n<\/tr>\n<tr>\n<td>研究报告<\/td>\n<td>实验图表、样本外验证、对照实验<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>让组员认识到每个环节的结果都会影响下一个环节。<\/p>\n<p>如果股票历史数据存在错误，那么即使因子公式、回测代码全部正确，最后的研究结论仍然可能不可靠。<\/p>\n<p>再强调一句：<\/p>\n<p><strong>研究不是一次完成的流水线，而是提出假设、实验验证、发现问题、修正方法的持续迭代过程。<\/strong><\/p>\n<p><strong>排版建议：<\/strong> 将六阶段绘制成一张横向主流程图，下面对应各自的技术栈和输出文件。它也可以作为后面四讲课件的导航页。<\/p>\n<hr />", "<h2>P05｜A股市场基本交易知识<\/h2>\n<p>建议用时：6分钟<\/p>\n<h3>量化研究必须理解交易制度，否则回测可能脱离真实市场<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>A股是以人民币计价、在中国境内证券市场交易的股票。股票价格、成交量、交易制度和上市状态共同构成量化研究的重要基础。<\/p>\n<h3>1. 股票日行情的主要字段<\/h3>\n<table>\n<thead>\n<tr>\n<th>字段<\/th>\n<th>英文<\/th>\n<th>含义<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>开盘价<\/td>\n<td>Open<\/td>\n<td>当日开盘形成的价格<\/td>\n<\/tr>\n<tr>\n<td>最高价<\/td>\n<td>High<\/td>\n<td>当日最高成交价格<\/td>\n<\/tr>\n<tr>\n<td>最低价<\/td>\n<td>Low<\/td>\n<td>当日最低成交价格<\/td>\n<\/tr>\n<tr>\n<td>收盘价<\/td>\n<td>Close<\/td>\n<td>当日收盘形成的价格<\/td>\n<\/tr>\n<tr>\n<td>成交量<\/td>\n<td>Volume<\/td>\n<td>当日成交股票数量<\/td>\n<\/tr>\n<tr>\n<td>成交额<\/td>\n<td>Amount<\/td>\n<td>当日成交金额<\/td>\n<\/tr>\n<tr>\n<td>换手率<\/td>\n<td>Turnover Rate<\/td>\n<td>成交股数相对流通股本的比例，具体口径依数据源<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<p>其中，Open、High、Low、Close、Volume通常被合称为 <strong>OHLCV行情数据<\/strong>。<\/p>\n<h3>2. A股基本交易制度<\/h3>\n<ul>\n<li><strong>T+1交易机制<\/strong>：一般情况下，当日买入的A股不能在当天卖出。<\/li>\n<li><strong>涨跌幅限制<\/strong>：主板常规涨跌幅限制为10%，科创板、创业板常规为20%，但新股上市初期等存在例外。<\/li>\n<li><strong>停牌机制<\/strong>：股票停牌期间无法正常参与交易。<\/li>\n<li><strong>交易日历<\/strong>：周末、休市日不属于交易日；20个交易日不等于20个自然日。<\/li>\n<li><strong>交易费用<\/strong>：买卖股票可能涉及佣金、印花税及其他费用。<\/li>\n<\/ul>\n<p>规则参考：<a href=\"https://www.sse.com.cn/lawandrules/sselawsrules2025/stocks/exchange/c/c_20260424_10816482.shtml\">上海证券交易所交易规则（2026年修订）<\/a>。<\/p>\n<p>特别需要注意：<strong>2026年7月6日起，沪深主板风险警示股票涨跌幅限制由此前的5%调整为10%。<\/strong> 你们如果回测2020–2025年的历史数据，必须按照当时适用的规则处理，而不能直接套用现行规则。<\/p>\n<h3>3. 为什么需要复权价格？<\/h3>\n<p>上市公司发生现金分红、送股、转增等行为后，股票价格可能出现机械调整。<\/p>\n<p>如果不考虑这些公司行为，可能把并非真实投资亏损的除权价格变化误认为股票下跌。<\/p>\n<p>因此：<\/p>\n<ul>\n<li><strong>原始价格<\/strong>：用于理解实际交易报价。<\/li>\n<li><strong>复权价格或总收益口径<\/strong>：用于研究跨时间的可比收益，但必须确认调整方法。<\/li>\n<\/ul>\n<h3>4. 对量化回测有什么影响？<\/h3>\n<p>举例：<\/p>\n<p>假设某只股票收盘后被策略选中，但第二天开盘直接涨停且没有可供成交的卖盘。<\/p>\n<p>即使模型发出了买入信号，也不能自动假设这笔交易一定成交。<\/p>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>第一讲只要让组员知道这些制度为什么影响研究结果即可。复权处理、成交规则以及交易费用的代码实现，留到第二讲和第五讲。<\/p>\n<p><strong>排版建议：<\/strong> 左边放一张OHLC蜡烛图，右边放A股交易规则卡片；底部展示“策略产生买入信号，但无法成交”的场景。<\/p>\n<hr />", "<h2>P06｜收益率究竟是什么？<\/h2>\n<p>建议用时：5分钟<\/p>\n<h3>收益率衡量投资价值的相对变化，是因子计算与策略绩效分析的基础<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>投资收益率（Return）衡量一项资产在特定时间内的价值变化比例，是量化投资最基本的计算指标。<\/p>\n<h3>1. 简单收益率<\/h3>\n<div class=\"math\"><code>r_t=\\frac{P_t-P_{t-1}}{P_{t-1}} =\\frac{P_t}{P_{t-1}}-1<\/code><\/div>\n\n<p>其中：<\/p>\n<ul>\n<li><code>P_t<\/code>：当前价格。<\/li>\n<li><code>P_{t-1}<\/code>：上一期价格。<\/li>\n<li><code>r_t<\/code>：本期简单收益率。<\/li>\n<\/ul>\n<p><strong>例子：<\/strong> 一只股票从100元上涨到105元。<\/p>\n<div class=\"math\"><code>r=\\frac{105-100}{100}=5\\%<\/code><\/div>\n\n<p>注意：这里只考虑价格变化，尚未纳入分红及交易费用。<\/p>\n<h3>2. 多期累计收益率<\/h3>\n<p>如果已知每一期的简单收益率，则：<\/p>\n<div class=\"math\"><code>R_{\\mathrm{cum}}=\\prod_{t=1}^{T}(1+r_t)-1<\/code><\/div>\n\n<p>例如，第一期上涨5%，第二期下跌2%：<\/p>\n<div class=\"math\"><code>(1+5\\%)(1-2\\%)-1=2.9\\%<\/code><\/div>\n\n<p>这意味着100元先增长到105元，再下降到102.9元，最终累计收益率为2.9%。<\/p>\n<h3>3. 为什么不能直接将收益率相加？<\/h3>\n<p>因为收益率存在<strong>复利效应（Compounding Effect）<\/strong>。<\/p>\n<p>例如：<\/p>\n<ul>\n<li>第一天上涨10%。<\/li>\n<li>第二天下跌10%。<\/li>\n<\/ul>\n<p>最终收益率并不是0%，而是：<\/p>\n<div class=\"math\"><code>1.10\\times0.90-1=-1\\%<\/code><\/div>\n\n<h3>4. 在量化研究中的实际用途<\/h3>\n<p>收益率是后续所有计算的重要基础：<\/p>\n<ul>\n<li>过去20日收益可以构成动量因子。<\/li>\n<li>日收益率的标准差可以构成波动率因子。<\/li>\n<li>未来持有期收益是因子有效性检验的目标变量。<\/li>\n<li>投资组合收益率用于计算净值、夏普和回撤。<\/li>\n<\/ul>\n<p><strong>图表数据（模拟）<\/strong>：资产价格：初始 100 → 第一期 105 → 第二期 102.9；折线图纵轴从 95 起。<\/p>\n<p><strong>授课提示：<\/strong><\/p>\n<p>讲完后直接问：<\/p>\n<p>“一只股票上涨20%后，下跌20%，投资者是赚了还是亏了？”<\/p>\n<p>正确答案是亏损4%。利用这个小问题让大家理解复利计算为什么重要。<\/p>\n<p><strong>排版建议：<\/strong> 左侧放公式，右侧放100元的价格变化曲线，底部放复利陷阱问题。<\/p>\n<hr />", "<h2>P07｜什么是 Alpha、Beta 和 Benchmark？<\/h2>\n<p>建议用时：5分钟<\/p>\n<h3>投资收益高，不代表策略真正创造了超越市场的价值<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>在量化投资中，我们不仅关心策略赚了多少钱，更关心它相对于市场表现如何，以及承担了多少市场风险。<\/p>\n<h3>三个基本概念<\/h3>\n<table>\n<thead>\n<tr>\n<th>概念<\/th>\n<th>中文含义<\/th>\n<th>核心作用<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>Benchmark<\/td>\n<td>业绩比较基准<\/td>\n<td>判断策略相对某个参考组合的表现<\/td>\n<\/tr>\n<tr>\n<td>Beta（β）<\/td>\n<td>市场风险暴露<\/td>\n<td>衡量投资组合对市场波动的敏感程度<\/td>\n<\/tr>\n<tr>\n<td>Alpha（α）<\/td>\n<td>风险调整后的超额表现<\/td>\n<td>衡量控制市场风险等因素后，模型仍无法解释的收益部分<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<h3>1. Benchmark：我们应该和谁比较？<\/h3>\n<p>假设某量化策略一年获得12%的收益，而同期沪深300指数上涨16%。<\/p>\n<p>假设案例 · 不代表实际回测<\/p>\n<p>量化策略收益<\/p>\n<h1>＋12%<\/h1>\n<p>沪深300收益<\/p>\n<h1>＋16%<\/h1>\n<p><strong>简单相对收益<\/strong><\/p>\n<h2>−4个百分点<\/h2>\n<p>虽然策略取得正收益，但它没有跑赢这个基准。<\/p>\n<p><strong>注意：<\/strong> 业绩基准必须与策略的股票池和风险特征尽可能匹配，并非所有A股策略都应该默认使用沪深300。<\/p>\n<h3>2. Beta：策略对市场波动有多敏感？<\/h3>\n<div class=\"math\"><code>\\beta=\\frac{\\operatorname{Cov}(R_p,R_m)} {\\operatorname{Var}(R_m)}<\/code><\/div>\n\n<p>其中 <code>R_p<\/code> 表示策略收益，<code>R_m<\/code> 表示市场收益。<\/p>\n<ul>\n<li>β≈1：与市场变化具有接近的敏感程度。<\/li>\n<li>β＞1：对市场变化的敏感程度通常较高。<\/li>\n<li>0＜β＜1：对市场变化的敏感程度通常较低。<\/li>\n<\/ul>\n<p>β并不代表收益一定按固定比例随市场变化，只是对历史线性关系的估计。<\/p>\n<h3>3. Alpha：真正值得研究的超额表现<\/h3>\n<p>在单因子市场模型中，可以写为：<\/p>\n<div class=\"math\"><code>R_p-R_f=\\alpha+\\beta(R_m-R_f)+\\varepsilon<\/code><\/div>\n\n<p>这里的α是风险调整后的截距，不等于简单的“策略收益率减去市场收益率”。<\/p>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>这页不用深入CAPM推导。你只需要让大家理解：<\/p>\n<p><strong>策略赚钱、策略跑赢基准、策略产生显著的风险调整后Alpha，是三个不同层次的判断。<\/strong><\/p>\n<p><strong>排版建议：<\/strong> 使用两条净值曲线比较策略与基准，再用三个简洁卡片分别解释Alpha、Beta、Benchmark。<\/p>\n<hr />", "<h2>P08｜什么是股票因子？<\/h2>\n<p>建议用时：5分钟<\/p>\n<h3>因子（Factor）是将股票特征转化为可计算、可检验的投资研究变量<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>股票因子是用于描述股票某种金融、交易或风险特征的量化指标。<\/p>\n<p>研究员通过因子研究，尝试解释不同股票的风险与收益差异，或寻找对未来收益具有预测价值的信息。<\/p>\n<h3>常见因子类型<\/h3>\n<table>\n<thead>\n<tr>\n<th>类型<\/th>\n<th>代表因子<\/th>\n<th>研究的金融特征<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>动量 Momentum<\/td>\n<td>过去20日收益率<\/td>\n<td>股价趋势与收益持续性<\/td>\n<\/tr>\n<tr>\n<td>价值 Value<\/td>\n<td>市盈率、市净率<\/td>\n<td>估值水平<\/td>\n<\/tr>\n<tr>\n<td>质量 Quality<\/td>\n<td>ROE、盈利能力<\/td>\n<td>企业经营质量<\/td>\n<\/tr>\n<tr>\n<td>风险 Risk<\/td>\n<td>历史波动率、Beta<\/td>\n<td>股票风险特征<\/td>\n<\/tr>\n<tr>\n<td>流动性 Liquidity<\/td>\n<td>换手率、成交量<\/td>\n<td>股票交易活跃程度<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<h3>本期为什么选择三个量价因子？<\/h3>\n<p><strong>20日动量因子（Momentum）<\/strong><\/p>\n<p>衡量股票过去20个交易日的累计收益。<\/p>\n<p>研究问题：近期上涨较多的股票，未来是否可能继续表现较好？<\/p>\n<hr />\n<p><strong>20日波动率因子（Volatility）<\/strong><\/p>\n<p>衡量股票过去20日收益率的波动程度。<\/p>\n<p>研究问题：高波动或低波动股票，未来收益表现是否存在系统性差异？<\/p>\n<hr />\n<p><strong>20日换手率因子（Turnover）<\/strong><\/p>\n<p>衡量股票近期的交易活跃程度。<\/p>\n<p>研究问题：市场交易活跃程度与未来股票收益是否有关？<\/p>\n<p>选择这三个因子的原因：易于理解、容易从行情数据构建、覆盖不同市场特征，也适合初学者开展横截面统计检验。<\/p>\n<h3>三个必须理解的区别<\/h3>\n<ul>\n<li><strong>因子不等于策略<\/strong>：因子只是衡量某类股票特征。<\/li>\n<li><strong>因子不等于预测结果<\/strong>：因子是否有预测能力，需要通过历史数据检验。<\/li>\n<li><strong>因子方向不固定<\/strong>：例如高换手率不一定代表更高收益，必须通过研究判断。<\/li>\n<\/ul>\n<p><strong>授课提示：<\/strong><\/p>\n<p>可以提问：“一只股票过去20日涨了30%，是不是意味着我们应该直接买入？”<\/p>\n<p>借此引出下一页：因子值与未来收益之间的关系。<\/p>\n<p><strong>排版建议：<\/strong> 三张并列卡片分别展示动量走势、波动分布和成交量柱状图，底部用一句话解释因子与策略的区别。<\/p>\n<hr />", "<h2>P09｜因子与未来收益的关系<\/h2>\n<p>建议用时：5分钟<\/p>\n<h3>因子研究的关键：使用过去和现在的信息，检验对未来收益的预测关系<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>量化因子研究通常需要区分两类数据：<\/p>\n<p><strong>特征（Feature / X）<\/strong><\/p>\n<p>在研究时点已经能够获得的股票信息，例如过去20日动量、波动率和成交活跃度。<\/p>\n<p><strong>标签（Label / Y）<\/strong><\/p>\n<p>用于事后验证预测能力的未来结果，例如之后20个交易日的股票收益。<\/p>\n<h3>时间关系<\/h3>\n<p>T−20 至 T<\/p>\n<p>观察过去20日行情<\/p>\n<p>T日收盘<\/p>\n<p>形成可用因子信号<\/p>\n<p>后续持有期<\/p>\n<p>观察未来收益<\/p>\n<p>历史信息  信号生成  事后检验<\/p>\n<p>如果在T日收盘后计算因子，则真实交易只能在之后可交易的时间执行。因此，本项目正式实验还需要让收益标签与实际可执行的持有期保持一致。<\/p>\n<h3>一个简单的因子研究例子<\/h3>\n<p>模拟教学数据，非真实A股。<\/p>\n<table>\n<thead>\n<tr>\n<th>股票<\/th>\n<th>当前动量因子<\/th>\n<th>后续20日收益<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>A<\/td>\n<td>＋15%<\/td>\n<td>＋8%<\/td>\n<\/tr>\n<tr>\n<td>B<\/td>\n<td>＋10%<\/td>\n<td>＋5%<\/td>\n<\/tr>\n<tr>\n<td>C<\/td>\n<td>＋4%<\/td>\n<td>＋1%<\/td>\n<\/tr>\n<tr>\n<td>D<\/td>\n<td>−3%<\/td>\n<td>−2%<\/td>\n<\/tr>\n<tr>\n<td>E<\/td>\n<td>−8%<\/td>\n<td>−6%<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<p>从表面上看，动量较高的股票，其后续收益也较高。<\/p>\n<p>但这只是五只股票的一次观察。<\/p>\n<p><strong>我们不能据此证明动量因子长期有效。<\/strong><\/p>\n<p>需要进一步回答：<\/p>\n<ol>\n<li>这种关系在更多股票和更多时期是否存在？<\/li>\n<li>关系是否稳定，还是由偶然因素造成？<\/li>\n<li>这种关系能否转化成考虑成本后的投资收益？<\/li>\n<\/ol>\n<p>后续第四讲将使用Rank IC、ICIR和分组收益检验这些问题。<\/p>\n<p><strong>讲解重点：<\/strong><\/p>\n<p><strong>相关性不代表因果性，更不等于确定性的预测。<\/strong><\/p>\n<p>研究员不是通过几个成功案例证明策略有效，而是通过大量样本和严格实验检验一个假设。<\/p>\n<p><strong>排版建议：<\/strong> 上半部分使用时间轴区分过去与未来，下半部分使用股票因子排名表，并以颜色标记因子与未来收益的关系。<\/p>\n<hr />", "<h2>P10｜从因子到股票组合<\/h2>\n<p>建议用时：4分钟<\/p>\n<h3>从股票因子到投资决策：评分、排名、选股和权重分配<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>因子本身不能直接告诉我们应该持有哪些股票，还需要一套明确的投资组合构建规则。<\/p>\n<p>本期采用最基础的静态多因子选股方法。<\/p>\n<h3>完整流程<\/h3>\n<h3>课堂模拟：10只股票选出3只<\/h3>\n<p>假设已经计算出10只股票的多因子综合得分：<\/p>\n<table>\n<thead>\n<tr>\n<th>股票<\/th>\n<th>综合得分<\/th>\n<th>排名<\/th>\n<th>选股结果<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>E<\/td>\n<td>1.60<\/td>\n<td>1<\/td>\n<td>买入<\/td>\n<\/tr>\n<tr>\n<td>A<\/td>\n<td>1.20<\/td>\n<td>2<\/td>\n<td>买入<\/td>\n<\/tr>\n<tr>\n<td>C<\/td>\n<td>0.90<\/td>\n<td>3<\/td>\n<td>买入<\/td>\n<\/tr>\n<tr>\n<td>I<\/td>\n<td>0.70<\/td>\n<td>4<\/td>\n<td>不买入<\/td>\n<\/tr>\n<tr>\n<td>G<\/td>\n<td>0.40<\/td>\n<td>5<\/td>\n<td>不买入<\/td>\n<\/tr>\n<tr>\n<td>D<\/td>\n<td>0.10<\/td>\n<td>6<\/td>\n<td>不买入<\/td>\n<\/tr>\n<tr>\n<td>J<\/td>\n<td>0.00<\/td>\n<td>7<\/td>\n<td>不买入<\/td>\n<\/tr>\n<tr>\n<td>F<\/td>\n<td>−0.20<\/td>\n<td>8<\/td>\n<td>不买入<\/td>\n<\/tr>\n<tr>\n<td>B<\/td>\n<td>−0.50<\/td>\n<td>9<\/td>\n<td>不买入<\/td>\n<\/tr>\n<tr>\n<td>H<\/td>\n<td>−0.90<\/td>\n<td>10<\/td>\n<td>不买入<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<p>我们选择排名前三的E、A、C三只股票，构建等权组合。<\/p>\n<p>每只股票的目标权重：<\/p>\n<div class=\"math\"><code>w_i=\\frac{1}{3}\\approx33.33\\%<\/code><\/div>\n\n<p>这意味着资金按照近似相同比例配置到三只股票中。<\/p>\n<h3>为什么需要定期调仓？<\/h3>\n<p>因为股票的因子值会随行情变化，组合中的股票排名也会发生变化。<\/p>\n<p>本期采用<strong>月度调仓<\/strong>作为教学规则：每月在预设时间更新因子，重新形成股票排名，并调整目标持仓。<\/p>\n<p>真实交易中需要考虑成交价格、资金余额和交易费用，目标权重不一定能精确实现。<\/p>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>这一页只需要让组员理解“因子如何成为策略”。<\/p>\n<p>至于MAD去极值、Z-score、因子方向及合成公式，在第三讲和第五讲详细解释。<\/p>\n<p><strong>排版建议：<\/strong> 左侧展示10只股票的综合得分排名柱状图，右侧展示前三名对应的等权投资组合。<\/p>\n<hr />", "<h2>P11｜为什么需要回测？<\/h2>\n<p>建议用时：4分钟<\/p>\n<h3>回测不是证明策略未来一定盈利，而是检验历史表现、交易可行性与研究假设<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>策略回测（Backtesting）是指按照预先定义的投资规则，使用历史市场数据模拟交易与持仓过程，评价策略在历史环境下的收益、风险和交易行为。<\/p>\n<h3>回测通常回答四类问题<\/h3>\n<p><strong>1. 收益表现<\/strong><\/p>\n<p>策略历史赚了多少钱？是否跑赢合适的比较基准？<\/p>\n<p><strong>2. 风险表现<\/strong><\/p>\n<p>策略收益波动有多大？最大回撤是多少？<\/p>\n<p><strong>3. 交易成本<\/strong><\/p>\n<p>如果加入交易费用、滑点和换手成本，策略收益是否仍然合理？<\/p>\n<p><strong>4. 稳定性<\/strong><\/p>\n<p>策略是否只在某些行情或特定历史区间表现良好？<\/p>\n<h3>三个核心回测指标<\/h3>\n<table>\n<thead>\n<tr>\n<th>指标<\/th>\n<th>含义<\/th>\n<th>为什么重要<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>净值曲线 NAV<\/td>\n<td>投资组合价值随时间变化<\/td>\n<td>直观展示策略的累计表现<\/td>\n<\/tr>\n<tr>\n<td>最大回撤 MDD<\/td>\n<td>历史净值相对之前高点的最大跌幅<\/td>\n<td>衡量历史下行风险<\/td>\n<\/tr>\n<tr>\n<td>夏普比率 Sharpe<\/td>\n<td>单位波动风险对应的超额收益<\/td>\n<td>比较策略的风险调整后表现<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<h3>净值计算示例<\/h3>\n<p>假设初始净值为1：<\/p>\n<div class=\"math\"><code>NAV_t=NAV_{t-1}(1+R_t)<\/code><\/div>\n\n<p>其中 <code>R_t<\/code> 为组合当期收益率。<\/p>\n<p><strong>图表数据（模拟）<\/strong>：策略净值：初始 1.00 → 第1期 1.04 → 第2期 1.01 → 第3期 1.08；折线图纵轴从 0.95 起。<\/p>\n<p>净值从1.04下降到1.01，说明在此期间出现了约2.88%的回撤。随后净值恢复并创新高。<\/p>\n<p>注意：<strong>策略最终盈利，不代表过程中不存在较大的亏损风险。<\/strong><\/p>\n<h3>回测的局限性<\/h3>\n<ul>\n<li>历史表现不能保证未来收益。<\/li>\n<li>不同数据和参数选择可能导致不同结果。<\/li>\n<li>忽略成交约束与交易成本可能高估策略收益。<\/li>\n<li>反复根据历史结果优化模型容易产生过拟合。<\/li>\n<\/ul>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>可以告诉组员：<\/p>\n<p>“一个策略年化收益率很高，但最大回撤达到50%，是否还算优秀？”<\/p>\n<p>让她们意识到不能只凭收益率评价量化策略。<\/p>\n<p><strong>排版建议：<\/strong> 左侧大面积展示净值曲线，右侧用三个指标卡片解释收益、回撤和夏普。<\/p>\n<hr />", "<h2>P12｜量化研究中三个最危险的错误<\/h2>\n<p>建议用时：5分钟<\/p>\n<h3>一个漂亮但存在偏差的回测结果，可能比没有回测更危险<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>金融量化研究中，最常见的错误并不是数学公式写错，而是实验使用了不符合真实历史条件的信息或交易假设。<\/p>\n<h3>错误一：前视偏差（Look-ahead Bias）<\/h3>\n<p><strong>定义：<\/strong> 在历史研究时点使用了当时尚未获得的信息。<\/p>\n<p>错误示例：<\/p>\n<p>某策略在T日收盘后才计算出选股信号，却假设已经按照T日收盘价格完成买入。<\/p>\n<p>正确做法：<\/p>\n<p>明确因子能够被观察到的时间，并按照下一可交易时点进行交易模拟。<\/p>\n<h3>错误二：幸存者偏差（Survivorship Bias）<\/h3>\n<p><strong>定义：<\/strong> 研究样本只保留最终仍然存续的股票，忽略历史上曾存在但后来退市、被剔除等的证券。<\/p>\n<p>错误示例：<\/p>\n<p>用2026年的沪深300成分股名单，直接作为2020年历史回测中的股票池。<\/p>\n<p>正确做法：<\/p>\n<p>尽量使用每个历史时点真实的股票池与可交易状态；若数据无法覆盖，应披露样本限制及可能的偏差。<\/p>\n<h3>错误三：忽略交易成本（Transaction Cost Bias）<\/h3>\n<p><strong>定义：<\/strong> 回测默认买卖股票不需要付出实际费用，或者假设所有订单总能按照理想价格成交。<\/p>\n<p>错误示例：<\/p>\n<p>某策略不断进行频繁调仓，回测毛收益较高，但没有扣除手续费、税费与滑点。<\/p>\n<p>正确做法：<\/p>\n<p>明确交易成本模型，并模拟合理的交易执行条件，报告扣除成本后的策略结果。<\/p>\n<h3>三类错误对照<\/h3>\n<table>\n<thead>\n<tr>\n<th>错误<\/th>\n<th>可能的结果<\/th>\n<th>正确研究原则<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>前视偏差<\/td>\n<td>使用未来信息导致虚假的预测优势<\/td>\n<td>信息必须在信号生成时已知<\/td>\n<\/tr>\n<tr>\n<td>幸存者偏差<\/td>\n<td>股票样本失真，收益与风险估计偏误<\/td>\n<td>尽量还原历史股票池<\/td>\n<\/tr>\n<tr>\n<td>忽略交易成本<\/td>\n<td>高估策略实际可实现收益<\/td>\n<td>计入费用、滑点与成交限制<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>强调这些错误不一定使所有策略收益变高，但会破坏研究结论的可信度。<\/p>\n<p>可以用一张“错误回测收益非常漂亮，但修复后优势消失”的假设示意图，让组员理解为什么真实量化研究需要严格验证。<\/p>\n<p><strong>排版建议：<\/strong> 三栏卡片，每栏采用“错误案例 → 为什么错误 → 怎样修复”的结构。<\/p>\n<hr />", "<h2>P13｜本期研究问题与课堂总结<\/h2>\n<p>建议用时：4分钟<\/p>\n<h3>我们的目标不是预测每一次股价涨跌，而是用严谨实验判断因子是否具有研究价值<\/h3>\n<p><strong>PPT正文：<\/strong><\/p>\n<p>本期《A股多因子量化选股与回测研究》将围绕三个研究假设开展实验。<\/p>\n<h3>三个核心研究假设<\/h3>\n<p><strong>H1：因子预测能力<\/strong><\/p>\n<p>部分量价因子与未来股票收益存在统计上的预测关系。<\/p>\n<p>研究方法：Rank IC、ICIR、分组收益检验。<\/p>\n<p><strong>H2：多因子组合优势<\/strong><\/p>\n<p>静态多因子组合在样本外的表现可能优于部分单因子策略。<\/p>\n<p>研究方法：单因子与静态多因子组合的对照回测。<\/p>\n<p><strong>H3：交易成本影响<\/strong><\/p>\n<p>纳入交易成本后，策略净收益及风险调整后表现可能发生明显变化。<\/p>\n<p>研究方法：毛收益与净收益比较、不同成本假设下的敏感性检验。<\/p>\n<p>需要强调：研究假设是我们计划检验的问题，而不是已经得到的结论。<\/p>\n<h3>本期最终交付成果<\/h3>\n<table>\n<thead>\n<tr>\n<th>成果类型<\/th>\n<th>具体内容<\/th>\n<\/tr>\n<\/thead>\n<tbody>\n<tr>\n<td>数据工程<\/td>\n<td>A股SQLite数据库及数据处理脚本<\/td>\n<\/tr>\n<tr>\n<td>因子研究<\/td>\n<td>三个量价因子及有效性分析<\/td>\n<\/tr>\n<tr>\n<td>策略系统<\/td>\n<td>静态多因子选股与回测<\/td>\n<\/tr>\n<tr>\n<td>研究成果<\/td>\n<td>一篇规范的量化实证研究报告<\/td>\n<\/tr>\n<tr>\n<td>个人能力<\/td>\n<td>SQL、Python、因子计算、策略分析与答辩<\/td>\n<\/tr>\n<\/tbody>\n<\/table>\n<h3>第一讲知识回顾<\/h3>\n<p>今天我们学习了：<\/p>\n<p><strong>量化投资是什么 → 量化研究员做什么 → 金融数据与收益率 → Alpha/Beta/Benchmark → 因子 → 投资组合 → 回测与偏差。<\/strong><\/p>\n<h3>课堂结束前的三个问题<\/h3>\n<ol>\n<li>如果让你用100只股票过去5年的数据构建一个选股策略，你准备按照哪些步骤开展研究？<\/li>\n<li>某只股票的20日动量因子很高，能否说明它未来一定会上涨？为什么？<\/li>\n<li>一条回测净值曲线非常漂亮，我们至少应该检查哪些问题，才能判断它是否可信？<\/li>\n<\/ol>\n<p><strong>讲解重点：<\/strong><\/p>\n<p>最后把第一讲连接到接下来四讲：<\/p>\n<ul>\n<li>第二讲：数据从哪里来，如何使用Python和SQL处理？<\/li>\n<li>第三讲：三个量价因子如何计算和清洗？<\/li>\n<li>第四讲：如何验证因子是否有效？<\/li>\n<li>第五讲：如何把因子变成策略，完成回测与研究报告？<\/li>\n<\/ul>\n<p><strong>排版建议：<\/strong> 用三个研究假设作为页面主体，右侧或底部放六步研究流程，最后留出一个“Questions &amp; Discussion”区域。<\/p>\n<hr />"]</script>
+<script>
+  const slides = Array.from(document.querySelectorAll(".slide"));
+  const notes = JSON.parse(document.getElementById("notesData").textContent);
+  const stage = document.getElementById("stage");
+  const pageCount = document.getElementById("pageCount");
+  const notesOverlay = document.getElementById("notesOverlay");
+  const overviewOverlay = document.getElementById("overviewOverlay");
+  const overviewGrid = document.getElementById("overviewGrid");
+  let current = 0;
+  let lastFocus = null;
+  function clamp(n) { return Math.max(0, Math.min(slides.length - 1, n)); }
+  function go(n, updateHash = true) {
+    current = clamp(n);
+    slides.forEach((slide, i) => { slide.classList.toggle("active", i === current); slide.setAttribute("aria-hidden", i === current ? "false" : "true"); });
+    pageCount.textContent = String(current + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0");
+    document.getElementById("stageProgress").style.width = ((current + 1) / slides.length * 100) + "%";
+    document.getElementById("prevBtn").disabled = current === 0;
+    document.getElementById("nextBtn").disabled = current === slides.length - 1;
+    document.getElementById("notesTitle").textContent = "讲者备注 · " + String(current + 1).padStart(2, "0") + " / " + slides[current].dataset.title;
+    document.getElementById("notesBody").innerHTML = notes[current];
+    document.querySelectorAll("#overviewGrid button").forEach((b,i) => b.classList.toggle("current",i === current));
+    if (updateHash) history.replaceState(null, "", "#slide-" + String(current + 1).padStart(2, "0"));
+    if (window.matchMedia("(max-width:900px)").matches) window.scrollTo(0, 0);
+  }
+  function openOverlay(el) { lastFocus = document.activeElement; el.classList.add("open"); el.querySelector("button").focus(); }
+  function closeOverlay(el) { el.classList.remove("open"); if(lastFocus) lastFocus.focus(); }
+  document.getElementById("prevBtn").addEventListener("click", () => go(current - 1));
+  document.getElementById("nextBtn").addEventListener("click", () => go(current + 1));
+  document.getElementById("notesBtn").addEventListener("click", () => openOverlay(notesOverlay));
+  document.getElementById("overviewBtn").addEventListener("click", () => openOverlay(overviewOverlay));
+  document.getElementById("fullscreenBtn").addEventListener("click", () => { if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.(); });
+  document.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closeOverlay(document.getElementById(b.dataset.close))));
+  [notesOverlay, overviewOverlay].forEach(el => el.addEventListener("click", e => { if(e.target === el) closeOverlay(el); }));
+  document.querySelectorAll(".reveal").forEach(b => b.addEventListener("click", () => { const a = document.getElementById(b.dataset.target); a.classList.toggle("visible"); b.setAttribute("aria-expanded", a.classList.contains("visible")); }));
+  slides.forEach((s,i) => { const b = document.createElement("button"); b.innerHTML = "<b>" + String(i+1).padStart(2,"0") + " / 13</b><span>" + s.dataset.title + "</span>"; b.addEventListener("click", () => { go(i); closeOverlay(overviewOverlay); }); overviewGrid.appendChild(b); });
+  document.addEventListener("keydown", e => {
+    if(e.key === "Escape") { if(notesOverlay.classList.contains("open")) closeOverlay(notesOverlay); if(overviewOverlay.classList.contains("open")) closeOverlay(overviewOverlay); return; }
+    if(e.target.closest("button, a") && e.key === " ") return;
+    if(e.key.toLowerCase() === "n") { e.preventDefault(); notesOverlay.classList.contains("open") ? closeOverlay(notesOverlay) : openOverlay(notesOverlay); return; }
+    if(e.key.toLowerCase() === "o") { e.preventDefault(); overviewOverlay.classList.contains("open") ? closeOverlay(overviewOverlay) : openOverlay(overviewOverlay); return; }
+    if(e.key.toLowerCase() === "f") { e.preventDefault(); if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen?.(); return; }
+    if(notesOverlay.classList.contains("open") || overviewOverlay.classList.contains("open")) return;
+    if(["ArrowRight","PageDown"," "].includes(e.key)) { e.preventDefault(); go(current+1); }
+    if(["ArrowLeft","PageUp"].includes(e.key)) { e.preventDefault(); go(current-1); }
+    if(e.key === "Home") { e.preventDefault(); go(0); }
+    if(e.key === "End") { e.preventDefault(); go(slides.length-1); }
+  });
+  window.addEventListener("hashchange", () => { const m = location.hash.match(/^#slide-(\d{1,2})$/); if(m) go(Number(m[1])-1,false); });
+  const stockGrid = document.getElementById("stockGrid");
+  for(let i=0;i<100;i++) { const s=document.createElement("span"); if([4,9,14,27,36,48,55,63,72,88].includes(i)) s.className="selected"; stockGrid.appendChild(s); }
+  const initial = location.hash.match(/^#slide-(\d{1,2})$/);
+  go(initial ? Number(initial[1])-1 : 0, false);
+</script>
+</body>
+</html>
