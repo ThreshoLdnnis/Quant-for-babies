@@ -196,6 +196,14 @@ Quant-for-babies/
 
 完整说明见 [docs/ROADMAP.md](docs/ROADMAP.md)。
 
+### 番外系列后续规划
+
+| 期次 | 项目 | 状态 |
+|------|------|------|
+| 第三期 | **LLM-Based Financial Research Assistant \| Financial NLP and RAG Project**<br>基于大语言模型的金融研究助手 \| 金融NLP与RAG项目 | 规划中 |
+| 第四期 | **Market-Regime-Aware Dynamic Multi-Factor Allocation \| Quantitative Research**<br>适配市场机制的动态多因子配置 \| 量化研究 | 规划中 |
+| 第五期 | **Machine Learning-Based Equity Selection and Explainable Alpha Research**<br>基于机器学习的选股方法与可解释阿尔法研究 | 规划中 |
+
 ---
 
 ## 免责声明
