@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="readme-cover.jpg" alt="番外期第二讲封面：Python、pandas与SQL金融数据工程，让每一行行情都能被信任" width="100%" />
+</p>
+
 # 番外期·第二讲：Python、pandas与SQL金融数据工程
 
 [打开长篇 HTML 课程](index.html) · [第一讲](../lecture-01/index.html) · [仓库目录](../../README.md)
