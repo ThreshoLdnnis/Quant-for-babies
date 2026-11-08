@@ -37,7 +37,7 @@
 
 **主题**：风险指标 · 波动率 · 多标的分析（pandas / numpy / matplotlib / statistics，全程结合金融场景）
 
-## 后续目录（规划）
+## 后续目录（Planning）
 
 - `phase3_ai/` — 因子 · AI 量化（第 9 章起）
 
