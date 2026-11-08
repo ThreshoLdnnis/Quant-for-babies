@@ -38,7 +38,7 @@
 | 数据 | `yfinance` · `akshare` 免费日线行情 |
 | 第一期 | 4 章 |
 | 第二期 | 4 章|
-| 番外期 | 第一讲：量化投资入门与完整研究流程；第二讲：Python、pandas与SQL金融数据工程；第三讲：量化因子构建与特征预处理；第四讲：因子有效性检验与基础统计 |
+| 番外期 | 五讲系列：量化研究流程 → 数据工程 → 因子构建 → 有效性检验 → 多因子策略、回测与实证研究 |
 | 不适合 | 已具备完整回测框架、仅需高级因子参考的读者 |
 
 ---
@@ -82,6 +82,7 @@ jupyter lab
 | 02 | Python、pandas与SQL金融数据工程 | [打开长篇 HTML 在线教程](extras/lecture-02/index.html) | [运行说明](extras/lecture-02/README.md) · [完整离线实操](extras/lecture-02/lab.py) |
 | 03 | 量化因子构建与特征预处理 | [打开单文件 HTML 教程](extras/lecture-03/index.html) | [运行说明](extras/lecture-03/README.md) · [因子实操](extras/lecture-03/factor_lab.py) · [绘图代码](extras/lecture-03/plot_factors.py) |
 | 04 | 因子有效性检验与基础统计 | [打开单文件 HTML 教程](extras/lecture-04/index.html) | [运行说明](extras/lecture-04/README.md) · [检验实操](extras/lecture-04/evaluation_lab.py) · [绘图代码](extras/lecture-04/plot_evaluation.py) |
+| 05 | 多因子策略、回测与实证研究 | [打开单文件 HTML 教程](extras/lecture-05/index.html) | [运行说明](extras/lecture-05/README.md) · [模拟回测](extras/lecture-05/backtest_lab.py) · [绘图代码](extras/lecture-05/plot_backtest.py) |
 
 第一讲课件可下载后直接在浏览器打开，无需安装依赖或联网。使用左右方向键、空格键或屏幕下方按钮翻页；按 N 查看完整讲者备注，O 打开总览，F 全屏投屏。所有图表数值均标注为模拟教学数据。
 
@@ -90,6 +91,8 @@ jupyter lab
 第三讲沿用单文件纵向阅读形式，完整讲解20日动量、波动率和平均换手率，以及MAD、横截面Z-score、方向与相关性。附8只虚构股票的可复现实验、质量报告和PNG/SVG绘图工具；全部模拟数据明确标注。见[第三讲说明](extras/lecture-03/README.md)。
 
 第四讲沿用第三讲的相同模拟数据与固定因子方向，讲解Rank IC、ICIR、五分组、统计不确定性与时间顺序检验。附手算、精确课堂置换、共同样本审计、练习答案及PNG/SVG图表；如实报告短样本无法支持正式三段检验的边界。见[第四讲说明](extras/lecture-04/README.md)。
+
+第五讲完成静态三因子合成、Top N、月度信号与下一开盘执行、现金股数账本、成本、净值风险、公平对照及实证报告。附15套确定性模拟账户、交易阻断与估值审计、五类研究图、练习和答辩验收；所有结果为模拟，短样本不冒称样本外实证。见[第五讲说明](extras/lecture-05/README.md)。
 
 ### 配套交互演示
 
@@ -143,7 +146,8 @@ Phase 2（已上线）
 ├── 第一讲 量化投资入门与完整研究流程 · 13 页 HTML 培训课件
 ├── 第二讲 Python、pandas与SQL金融数据工程 · 长篇 HTML 在线教程与离线实操
 ├── 第三讲 量化因子构建与特征预处理 · 单文件 HTML、因子实验与分布图
-└── 第四讲 因子有效性检验与基础统计 · 单文件 HTML、评价实验与Worksheet
+├── 第四讲 因子有效性检验与基础统计 · 单文件 HTML、评价实验与Worksheet
+└── 第五讲 多因子策略、回测与实证研究 · 单文件 HTML、交易账本与研究报告
 
 Phase 3（规划）  因子 · 多因子选股
 Phase 4（规划）  机器学习与 AI 量化
@@ -169,7 +173,8 @@ Quant-for-babies/
 │   ├── lecture-01/           # 番外期第一讲：HTML 幻灯片与逐页讲者备注
 │   ├── lecture-02/           # 番外期第二讲：长篇 HTML 教程、Python 实操与采集脚本
 │   ├── lecture-03/           # 番外期第三讲：因子构建、预处理、练习与参考代码
-│   └── lecture-04/           # 番外期第四讲：Rank IC、ICIR、统计与样本外评价
+│   ├── lecture-04/           # 番外期第四讲：Rank IC、ICIR、统计与样本外评价
+│   └── lecture-05/           # 番外期第五讲：静态策略、模拟回测、实证研究与验收
 ├── scripts/                  # 配图生成、Notebook 维护脚本
 ├── docs/ROADMAP.md           # 详细路线图
 ├── src/                      # 可复用模块（建设中）
