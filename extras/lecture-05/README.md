@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="readme-cover.jpg" alt="番外期第五讲封面：多因子策略、回测与实证研究" width="100%" />
+</p>
+
 # 番外期·第五讲：多因子策略、回测与实证研究
 
 [单文件HTML课程](index.html) · [完整模拟回测](backtest_lab.py) · [绘图脚本](plot_backtest.py) · [第四讲](../lecture-04/README.md) · [全系列目录](../../README.md)
