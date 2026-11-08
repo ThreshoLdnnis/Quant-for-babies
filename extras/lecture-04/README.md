@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="readme-cover.jpg" alt="番外期第四讲封面：因子有效性检验与基础统计" width="100%" />
+</p>
+
 # 番外期·第四讲：因子有效性检验与基础统计
 
 [打开单文件HTML](index.html) · [检验实操](evaluation_lab.py) · [绘图脚本](plot_evaluation.py) · [第三讲](../lecture-03/README.md) · [课程目录](../../README.md)
