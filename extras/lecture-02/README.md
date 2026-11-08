@@ -6,7 +6,7 @@
 
 ## 阅读页面
 
-下载整个仓库后打开 `extras/lecture-02/index.html`。请保留同目录的 `course.css` 和 `course.js`。课程文字、公式和SVG图表不依赖联网；代码复制、阅读进度、章节定位和均线窗口切换需要启用JavaScript。支持桌面侧栏、手机折叠目录、键盘操作与打印。
+只需下载 `index.html`，双击即可阅读。样式、交互、SVG图表与可下载的Python代码均已内置，不需要同时下载 `course.css` 和 `course.js`。代码复制、阅读进度和均线窗口切换需要启用JavaScript。支持桌面侧栏、手机折叠目录、键盘操作与打印；外部参考资料与GitHub课程导航需要联网。
 
 GitHub文件页面展示的是源码；下载后在浏览器打开，或在仓库根目录运行：
 
@@ -62,14 +62,16 @@ macOS / Linux 将解释器换为 `.venv/bin/python`。若已使用正确的课�
 
 ## 文件
 
-- `index.html`：完整课程正文，公式使用原生HTML上下标，表格和图像有文字说明。
-- `course.css`：响应式布局与打印样式。
-- `course.js`：阅读进度、目录状态、复制按钮、模拟均线交互。
+- `index.html`：自包含的完整课程页面，公式使用原生HTML上下标，表格和图像有文字说明。
+- `course.css`：可维护的响应式布局与打印样式源文件；阅读不再依赖该文件。
+- `course.js`：可维护的交互源文件；阅读不再依赖该文件。
 - `lab.py`：完整离线实验与质量检查。
 - `collect_akshare.py`：可选联网快照采集。
 - `requirements.txt`：离线实验依赖；AkShare独立选装。
 
 现有第一期、第二期及 `extras/lecture-01/` 不属于本讲修改范围。
+
+修改样式、交互或Python附件后，运行 `python scripts/build_lecture02_standalone.py` 重新内置到HTML。该命令重复运行不会重复插入资源。
 
 ## 验证记录
 

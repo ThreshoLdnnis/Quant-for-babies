@@ -21,6 +21,17 @@ const observer = new IntersectionObserver(entries => {
   tocLinks.forEach(a => { if (a.hash === `#${visible[0].target.id}`) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
 }, {rootMargin:'-90px 0px -65% 0px', threshold:0});
 chapters.forEach(s => observer.observe(s));
+async function copyCodeText(content) {
+  if (navigator.clipboard?.writeText && window.isSecureContext) {
+    try { await navigator.clipboard.writeText(content); return; }
+    catch { /* Local-file clipboard access can be denied; try selection below. */ }
+  }
+  const area = document.createElement('textarea');
+  area.value = content; area.style.position = 'fixed'; area.style.opacity = '0';
+  document.body.append(area);
+  try { area.select(); if (!document.execCommand('copy')) throw new Error('copy unavailable'); }
+  finally { area.remove(); }
+}
 document.querySelectorAll('pre').forEach((pre, index) => {
   const wrapper = document.createElement('div'); wrapper.className = 'codebox';
   pre.parentNode.insertBefore(wrapper, pre);
@@ -31,11 +42,7 @@ document.querySelectorAll('pre').forEach((pre, index) => {
   button.addEventListener('click', async () => {
     const content = pre.textContent;
     try {
-      if (navigator.clipboard?.writeText && window.isSecureContext) await navigator.clipboard.writeText(content);
-      else {
-        const area = document.createElement('textarea'); area.value = content; area.style.position = 'fixed'; area.style.opacity = '0';
-        document.body.append(area); area.select(); const ok = document.execCommand('copy'); area.remove(); if (!ok) throw new Error('copy unavailable');
-      }
+      await copyCodeText(content);
       button.textContent = '已复制 ✓';
     } catch { button.textContent = '请选中代码复制'; }
     setTimeout(() => { button.textContent = '复制代码'; }, 2400);
