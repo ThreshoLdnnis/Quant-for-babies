@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="readme-cover.jpg" alt="番外期第三讲封面：量化因子构建与特征预处理" width="100%" />
+</p>
+
 # 番外期·第三讲：量化因子构建与特征预处理
 
 [打开完整HTML教程](index.html) · [下载实操代码](factor_lab.py) · [第二讲](../lecture-02/README.md) · [课程目录](../../README.md)
