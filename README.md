@@ -34,11 +34,11 @@
 
 | 项目 | 说明 |
 |------|------|
-| 形式 | Jupyter Notebook + 配套交互 HTML |
+| 形式 | Jupyter Notebook + 配套交互 HTML + 番外期长篇在线教程 |
 | 数据 | `yfinance` · `akshare` 免费日线行情 |
 | 第一期 | 4 章 |
 | 第二期 | 4 章|
-| 番外期 | 第一讲：量化投资入门与完整研究流程（HTML 培训课件） |
+| 番外期 | 第一讲：量化投资入门与完整研究流程；第二讲：Python、pandas与SQL金融数据工程 |
 | 不适合 | 已具备完整回测框架、仅需高级因子参考的读者 |
 
 ---
@@ -79,8 +79,11 @@ jupyter lab
 | 讲 | 主题 | 课件 | 讲者材料 |
 |:--:|------|------|------|
 | 01 | 量化投资入门与完整研究流程 | [打开 13 页交互式 HTML 课件](extras/lecture-01/index.html) | [完整逐页讲者备注](extras/lecture-01/lecture-notes.md) |
+| 02 | Python、pandas与SQL金融数据工程 | [打开长篇 HTML 在线教程](extras/lecture-02/index.html) | [运行说明](extras/lecture-02/README.md) · [完整离线实操](extras/lecture-02/lab.py) |
 
-课件可下载后直接在浏览器打开，无需安装依赖或联网。使用左右方向键、空格键或屏幕下方按钮翻页；按 N 查看完整讲者备注，O 打开总览，F 全屏投屏。所有图表数值均标注为模拟教学数据。
+第一讲课件可下载后直接在浏览器打开，无需安装依赖或联网。使用左右方向键、空格键或屏幕下方按钮翻页；按 N 查看完整讲者备注，O 打开总览，F 全屏投屏。所有图表数值均标注为模拟教学数据。
+
+第二讲采用完整、连续纵向阅读的知识库页面，包含章节锚点、阅读进度、字段字典、公式、模拟图表、代码复制、实操与折叠答案。下载整个 `extras/lecture-02/` 文件夹后打开 `index.html`，保留同目录样式与交互文件即可离线阅读；Python 实操需安装该讲依赖，AkShare 真实采集为联网选做。GitHub文件页显示源码，页面运行方式见[第二讲说明](extras/lecture-02/README.md)。
 
 ### 配套交互演示
 
@@ -131,7 +134,8 @@ Phase 2（已上线）
 └── 08 多标的组合与相关性
 
 番外期（已上线）
-└── 第一讲 量化投资入门与完整研究流程 · 13 页 HTML 培训课件
+├── 第一讲 量化投资入门与完整研究流程 · 13 页 HTML 培训课件
+└── 第二讲 Python、pandas与SQL金融数据工程 · 长篇 HTML 在线教程与离线实操
 
 Phase 3（规划）  因子 · 多因子选股
 Phase 4（规划）  机器学习与 AI 量化
@@ -154,7 +158,8 @@ Quant-for-babies/
 │   ├── images/               # README 与传播用配图
 │   └── interactive/          # 独立 HTML 交互演示
 ├── extras/
-│   └── lecture-01/           # 番外期第一讲：HTML 幻灯片与逐页讲者备注
+│   ├── lecture-01/           # 番外期第一讲：HTML 幻灯片与逐页讲者备注
+│   └── lecture-02/           # 番外期第二讲：长篇 HTML 教程、Python 实操与采集脚本
 ├── scripts/                  # 配图生成、Notebook 维护脚本
 ├── docs/ROADMAP.md           # 详细路线图
 ├── src/                      # 可复用模块（建设中）

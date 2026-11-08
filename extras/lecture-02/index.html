@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#102738"><meta name="description" content="面向零基础本科生的金融数据工程长篇教程：AkShare采集、pandas清洗与特征、SQLite与SQL、可复现实操与答案。"><title>番外期·第二讲｜Python、pandas与SQL金融数据工程</title><link rel="stylesheet" href="course.css"><script src="course.js" defer></script></head>
+<body><a class="skip" href="#content">跳到课程正文</a>
+<header class="topbar"><div class="top-inner"><a class="brand" href="../../README.md"><span class="mark" aria-hidden="true">Q/</span>QUANT FOR BABIES</a><div class="top-links"><a class="desktop-link" href="../lecture-01/index.html">← 番外期第一讲</a><a href="#practice">练习与答案</a><span class="progress-label" aria-live="off">已阅读 0%</span></div></div><div class="progress-wrap" aria-hidden="true"><div class="progress-bar"></div></div></header>
+<div class="hero" id="top"><div class="hero-inner"><div class="eyebrow">RESEARCH FOUNDATIONS / 番外期 · 第二讲</div><h1>Python、pandas 与 SQL<span>金融数据工程：让每一行行情都能被信任</span></h1><p class="lead">从一份陌生的股票行情表开始，学会获取、理解、清洗、计算与入库。把研究直觉变成可检查、可追溯、可复现的数据流程，为后续因子研究打好基础。</p><div class="hero-actions"><a class="button" href="#overview">开始学习 ↓</a><a class="button secondary" href="lab.py" download>下载完整实操 Python</a><a class="button secondary" href="README.md">运行说明</a></div><div class="hero-meta"><div>适合对象<strong>零基础本科生</strong></div><div>建议安排<strong>阅读 2–3 小时 · 实操 2 小时</strong></div><div>课程产出<strong>干净行情 / 特征表 / SQLite / 质量报告</strong></div><div>学习方式<strong>纵向阅读 · 边读边运行</strong></div></div></div>
+
+</div><div class="layout"><aside class="sidebar"><div class="sidebar-title">CONTENTS / 本讲目录</div><nav class="toc" aria-label="章节目录"><a href="#overview"><span class="n">00</span>课程概览</a><a href="#value"><span class="n">01</span>金融数据工程的价值</a><a href="#fields"><span class="n">02</span>OHLCV 与字段字典</a><a href="#adjustment"><span class="n">03</span>原始价与复权价</a><a href="#setup"><span class="n">04</span>准备 Python 环境</a><a href="#acquire"><span class="n">05</span>用 AkShare 采集</a><a href="#inspect"><span class="n">06</span>读取与检查</a><a href="#clean"><span class="n">07</span>清洗与异常处理</a><a href="#pandas"><span class="n">08</span>分组、滞后与滚动</a><a href="#sql"><span class="n">09</span>SQLite 与 SQL</a><a href="#lab"><span class="n">10</span>端到端实操</a><a href="#quality"><span class="n">11</span>质量验收</a><a href="#practice"><span class="n">12</span>练习、答案与任务</a><a href="#references"><span class="n">13</span>资料与继续学习</a></nav><div class="sidebar-foot">数据先于模型。<br>看懂字段，保留证据，验证结果。<br><br>离线页面 · 无外部字体或图表依赖<br>资料核查：2026-11-08</div></aside><main id="content"><details class="mobile-toc"><summary>本讲目录 · 14 个阅读单元</summary><nav class="toc" aria-label="章节目录"><a href="#overview"><span class="n">00</span>课程概览</a><a href="#value"><span class="n">01</span>金融数据工程的价值</a><a href="#fields"><span class="n">02</span>OHLCV 与字段字典</a><a href="#adjustment"><span class="n">03</span>原始价与复权价</a><a href="#setup"><span class="n">04</span>准备 Python 环境</a><a href="#acquire"><span class="n">05</span>用 AkShare 采集</a><a href="#inspect"><span class="n">06</span>读取与检查</a><a href="#clean"><span class="n">07</span>清洗与异常处理</a><a href="#pandas"><span class="n">08</span>分组、滞后与滚动</a><a href="#sql"><span class="n">09</span>SQLite 与 SQL</a><a href="#lab"><span class="n">10</span>端到端实操</a><a href="#quality"><span class="n">11</span>质量验收</a><a href="#practice"><span class="n">12</span>练习、答案与任务</a><a href="#references"><span class="n">13</span>资料与继续学习</a></nav></details>
+<section id="overview" class="chapter"><div class="section-kicker">00 / Learning map</div><h2>先知道我们要交付什么</h2><p class="intro">第一讲建立研究框架，这一讲把框架里的“数据”做实。终点是一份别人接手后也能解释、重跑和检查的数据资产。</p><p>你不需要提前会编程。先把 Python 理解成“可以重复执行的操作清单”，pandas 理解成“用代码处理表格的工具”，SQLite 理解成“装在一个文件里的数据库”，SQL 则是向数据库提出问题的语言。本讲会解释每一步为什么做，并给出可运行的路径。</p><div class="grid3"><div class="card"><div class="big">01</div><h3>读懂行情</h3><p>知道一行代表什么、字段用什么单位、复权如何改变跨期可比性。</p></div><div class="card"><div class="big">02</div><h3>建立流水线</h3><p>采集和原始文件分离；无效数据隔离；特征按股票和时间计算。</p></div><div class="card"><div class="big">03</div><h3>证明可靠</h3><p>用约束、断言和两套计算交叉验证，形成可追溯的质量报告。</p></div></div><h3>两条学习路线，汇合到同一套方法</h3><div class="table-wrap"><table><thead><tr><th>路线</th><th>数据与目的</th><th>如何开始</th></tr></thead><tbody><tr><td>离线必做</td><td>虚构股票 SIM001 / SIM002；刻意注入错误；学习清洗与验证。SIM003 仅有证券资料。</td><td>安装 pandas，运行 <a href="lab.py">lab.py</a>，不依赖行情网站。</td></tr><tr><td>联网选做</td><td>中国平安 601318 的真实接口采集；观察分红前后原始价、复权价与元数据。</td><td>安装 AkShare，运行 <a href="collect_akshare.py">collect_akshare.py</a>，保留实际返回结果。</td></tr></tbody></table></div><aside class="callout"><div class="label">数据声明</div><p>本页所有数值图、手算小表、离线实操输出均为<strong>模拟教学数据</strong>，不代表真实 A 股行情或策略表现。真实公司案例只陈述有原始公告支持的事件事实；联网请求失败时，程序报错，不用模拟值冒充真实结果。</p></aside><h3>阅读与操作约定</h3><p>深色框里的代码可复制。短代码说明一个概念，可能需要上文的变量；“独立运行”会明确标注。完整离线脚本无需拼接片段。公式不依赖联网插件；表格和代码可以横向滚动。练习答案收在可展开区域，建议先尝试再查看。</p><p>建议按顺序读完字段、复权和清洗，再动手计算收益。若直接跳到 SQL，请先理解表中一个价格究竟来自哪一天、哪只股票、哪一种价格口径。</p></section>
+<section id="value" class="chapter"><div class="section-kicker">01 / Why data engineering</div><h2>模型的起点，是一份可信的数据</h2><p>假设研究问题是：“过去 20 个有效观测的涨幅较高，未来是否也容易上涨？”看上去只是一个除法，真正运行时却要先回答：股票代码有没有丢掉开头的零？20 行是否按日期排列？有没有把另一只股票接进窗口？除息产生的机械价格变化是否被误认为亏损？今天计算时能否使用这条数据？</p><p><strong>金融数据工程</strong>是把外部记录转成可供研究使用的数据，并保留每次转换的依据。它不只追求“程序没报错”，还要求数据的含义、时间和来源都正确。输入错误可能得到很漂亮的图，但漂亮不等于可信。</p><ol class="flow" aria-label="数据工程流程"><li><strong>采集与快照</strong><span>接口参数、原始文件、时间和版本</span></li><li><strong>检查与清洗</strong><span>字段、类型、主键、缺失与异常</span></li><li><strong>计算与入库</strong><span>特征、表结构、约束与查询</span></li><li><strong>验收与交付</strong><span>质量报告、可重跑脚本与说明</span></li></ol><h3>同一个研究，数据问题会怎样改变结论？</h3><div class="table-wrap"><table><thead><tr><th>触发情境</th><th>错误会传播到哪里</th><th>正确的工程动作</th></tr></thead><tbody><tr><td>同一天行情重复两次</td><td>成交量被重复求和，滚动窗口“20行”实际不足20次观测。</td><td>定义主键，区分完全重复和数值冲突。</td></tr><tr><td>停牌缺行，直接前向填充</td><td>凭空生成零收益与交易机会，低估波动。</td><td>先查交易日历和停牌状态，再决定展示或估值口径。</td></tr><tr><td>用今天的股票池研究十年前</td><td>退市股票被排除，产生幸存者偏差。</td><td>保存历史证券状态与当时可用股票池。</td></tr><tr><td>财报只按报告期关联</td><td>在公告发布前就使用财报数值，产生前视偏差。</td><td>使用公告时间 / 可用时间，做时点关联。</td></tr></tbody></table></div><h3>把数据分层，才能定位问题</h3><p><strong>Raw 原始层：</strong>保存接口返回，不在原地改值。<strong>Clean 清洗层：</strong>完成类型统一、主键检查与隔离，说明删掉或保留什么。<strong>Feature 特征层：</strong>在固定清洗快照上计算滞后、均线和收益。<strong>Report 报告层：</strong>列出行数、规则触发、覆盖范围和验证结论。</p><p>这四层不要求购买复杂系统。CSV、一个 SQLite 文件、一个 JSON 报告和脚本就能建立第一版证据链。重要的是不要把“修过的数据”写回原始文件，更不要无记录地手动修改几个异常值。</p></section>
+<section id="fields" class="chapter"><div class="section-kicker">02 / Data contract</div><h2>先定义“一行”，再看 OHLCV</h2><p>本讲日行情表的粒度是：<strong>一个股票 × 一个交易日期 × 一个价格口径</strong>。离线练习只保存一种原始价口径，因此主键是 <code>(symbol, trade_date)</code>。如果同表存原始价、前复权和后复权，主键必须再包含 <code>adjustment</code>，或分表存放；否则不同口径会互相覆盖。</p><p>OHLCV 是 Open、High、Low、Close、Volume 的缩写。它压缩了一天内的交易信息：开盘、最高、最低、收盘和成交量。它不是全天逐笔成交记录，也不能告诉你每个价格上能成交多少。</p><div class="table-wrap"><table class="wide"><thead><tr><th>标准字段</th><th>含义 / 类型</th><th>本讲单位与检查</th></tr></thead><tbody><tr><td><code>symbol</code></td><td>证券标识，字符串</td><td>保留前导零；生产库宜含交易所，避免跨市场重名。</td></tr><tr><td><code>trade_date</code></td><td>行情所属日期</td><td>日频用 YYYY-MM-DD；不是采集时间，也不是所有自然日。</td></tr><tr><td><code>open / high / low / close</code></td><td>开盘 / 最高 / 最低 / 收盘价，数值</td><td>原始 A 股报价为元/股；价格有限且大于0；high ≥ open、close、low；low ≤ open、close。</td></tr><tr><td><code>volume</code></td><td>成交量，数值</td><td>本讲统一成<strong>股</strong>；AkShare 此接口返回<strong>手</strong>，A股一手为100股，需显式乘100。</td></tr><tr><td><code>amount</code></td><td>成交额，数值</td><td>人民币元；与成交量不是同一个字段；非负，保留来源单位。</td></tr><tr><td><code>turnover_rate</code></td><td>换手率，可选</td><td>接口百分数 2.5 表示2.5%；若统一为小数，除以100；分母口径需查来源。</td></tr><tr><td><code>adjustment</code></td><td>价格调整口径</td><td>raw / qfq / hfq；影响所有 OHLC，不能只给 close 复权后混用。</td></tr><tr><td><code>source / fetched_at</code></td><td>来源 / 采集时间</td><td>用来追溯，时间最好含时区；与业务日期分开。</td></tr></tbody></table></div><h3>用一根蜡烛理解四个价格</h3><figure class="chart-panel"><div class="chart-head"><h3>一天的 OHLC</h3><span class="badge">模拟教学 · 单位：元/股</span></div><svg viewBox="0 0 700 235" role="img" aria-labelledby="candle-title candle-desc"><title id="candle-title">模拟日线蜡烛图</title><desc id="candle-desc">最高10.8，最低9.8，开盘10.0，收盘10.5。实体表示开收差，影线表示最高最低范围。</desc><line x1="260" y1="28" x2="260" y2="200" stroke="#087e83" stroke-width="3"/><rect x="223" y="78" width="74" height="85" fill="#087e83"/><g stroke="#bdceca" stroke-dasharray="4 4"><line x1="275" y1="28" x2="400" y2="28"/><line x1="300" y1="78" x2="400" y2="78"/><line x1="300" y1="163" x2="400" y2="163"/><line x1="275" y1="200" x2="400" y2="200"/></g><g fill="#314f5e" font-size="14"><text x="415" y="33">High 10.80 · 最高</text><text x="415" y="83">Close 10.50 · 收盘</text><text x="415" y="168">Open 10.00 · 开盘</text><text x="415" y="205">Low 9.80 · 最低</text><text x="40" y="113">开收实体</text><text x="40" y="135" font-size="12">上涨仅用青色示意</text></g></svg><figcaption>颜色只为区分，不作为收益信息的唯一载体。日内最高不代表策略一定能按该价卖出。</figcaption></figure><h3>单位错误会造成“程序正确，结果错100倍”</h3><p>假设接口成交量为 12,000 手，成交额为 12,300,000 元（均为模拟数）。成交股数是 1,200,000 股；成交均价约为 10.25 元/股。如果忘记乘100，就会得到 1,025 元/手，误当成元/股后会夸大100倍。</p><div class="equation">成交均价 ≈ 成交额 ÷ 成交股数<small>只在字段对应同一市场、同一时段、同一币种，且成交量大于0时使用；价格口径用原始价。</small></div><p>这也给我们一个检查思路：若“成交额 ÷ 成交股数”长期远离当日原始 high/low，优先排查单位和字段映射。但四舍五入、供应商定义及调整口径都可能影响边界，这属于需复核的诊断，不能机械改价。</p><aside class="callout warning"><strong>不要用复权价检查原始成交额。</strong><p>复权会改变价格刻度，成交量和成交额未必同步调整。把后复权 high/low 与原始成交均价比较，可能把正常记录误判为异常。</p></aside></section>
+<section id="adjustment" class="chapter"><div class="section-kicker">03 / Price basis</div><h2>原始价记录交易，复权价帮助跨期比较</h2><p>股票发生派息、送转等公司行为后，每股对应的权益可能变化。价格下降不一定等于投资者财富同比例下降。数据工程要同时回答“当时交易报价是多少”和“跨这次事件如何比较收益”，这两个问题需要不同字段。</p><div class="grid2"><div class="card"><h3>原始价格 raw</h3><p>反映历史市场报价，适合核对成交、涨跌停和名义股数。但直接跨除权除息计算，可能产生机械跳点。</p></div><div class="card"><h3>复权价格 qfq / hfq</h3><p>按供应商规则调整历史价格，帮助构建可比序列。前复权常锚定较新价格，后复权常锚定较早价格；应核实具体算法与版本。</p></div></div><h3>先做一个现金分红的模拟手算</h3><p>假设除息前持有1股，收盘价100元；每股现金分红5元；除息后价格恰为95元。只算价格变动，得到 −5%；若计入收到的5元现金、忽略税费并保持股数不变，总价值仍为100元。本例没有市场波动，也不是对真实股票除息后涨跌的预测。</p><div class="equation">r<sub>price</sub> = P<sub>t</sub> / P<sub>t−1</sub> − 1 = 95 / 100 − 1 = −5%<br>r<sub>cash</sub> = (P<sub>t</sub> + D<sub>t</sub>) / P<sub>t−1</sub> − 1 = 0%<small>D 为本期每股现金分红；此简式不覆盖送转股、配股、税费和再投资等复杂情况。</small></div><figure class="chart-panel"><div class="chart-head"><h3>同一事件，两种读数</h3><span class="badge">独立模拟 · 非真实行情</span></div><svg viewBox="0 0 700 245" role="img" aria-labelledby="adj-title adj-desc"><title id="adj-title">模拟现金分红与价格变化</title><desc id="adj-desc">原始报价从100降到95，另有5元现金。价格收益负5%，含现金的简单持有期收益0%。</desc><g stroke="#dfe7e3"><line x1="65" y1="55" x2="645" y2="55"/><line x1="65" y1="165" x2="645" y2="165"/></g><g fill="#526a79" font-size="12"><text x="22" y="60">100</text><text x="30" y="170">95</text><text x="90" y="223">除息前</text><text x="435" y="223">除息后</text></g><polyline points="120,55 300,55 460,165 610,165" fill="none" stroke="#087e83" stroke-width="3"/><line x1="120" y1="55" x2="610" y2="55" stroke="#a67735" stroke-width="3" stroke-dasharray="6 5"/><rect x="350" y="18" width="145" height="28" fill="#fbf3e6"/><text x="360" y="37" fill="#806232" font-size="12">95 元股票 + 5 元现金</text><text x="488" y="192" fill="#087e83" font-size="12">原始报价 95</text><line x1="370" y1="60" x2="370" y2="188" stroke="#adbdba" stroke-dasharray="3 5"/></svg><div class="legend"><span>原始价格</span><span class="gold">股票价值 + 分红现金</span></div><figcaption>图中的现金价值线用于解释权益变化，不是供应商复权算法的复刻，也不是总收益指数。</figcaption></figure><h3>真实金融案例：中国平安的年度派息</h3><p>中国平安（601318）的2024年年度权益分派公告披露：每股派发现金红利1.62元（含税），A股股权登记日为2025年6月27日，除息和发放日为2025年6月30日。由于回购股份不参与分红，公告用于除息参考价计算的“虚拟分派每股现金红利”约为1.6046元，除息参考价按前收盘价减去该数值计算。<a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0619/2025061901148_c.pdf" target="_blank" rel="noopener">查看原始实施公告（PDF）↗</a></p><p>工程启示是：<strong>现金派发金额与除息参考价格调整数值，并不必然相等。</strong>公告参考价也不是当天实际成交价。本页没有填入真实6月30日收盘价或涨跌幅。你可以在联网选做中采集这一时段，将真实接口记录与公告事件表关联后再分析。</p><h3>研究时必须保留的边界</h3><ul><li>AkShare 提醒：前复权历史会随新的除权除息重算，甚至可能出现负值。不能把“复权价一定为正”作为通用规则。本讲的正价格检查只用于原始价模拟表。</li><li>后复权价格的数值尺度可能很大。复权价格不是历史实际成交报价，也不能直接替代税后现金账户与交易成本计算。</li><li>相同代码、相同日期、不同采集日可能返回不同前复权历史。复现研究需要冻结原始文件、调整口径、接口版本、采集时间与哈希值。</li><li>只下载当前幸存的股票，或用当前财报和行业标签补历史，即使价格已复权，也仍然可能有研究偏差。</li></ul><aside class="callout"><strong>一个稳妥的课程选择</strong><p>离线实验先用原始价、虚构股票和观测间价格收益，把数据方法学扎实。真实研究再选择并说明合适的调整与总收益口径；不要把数据工程练习的收益字段直接称为策略收益。</p></aside></section>
+<section id="setup" class="chapter"><div class="section-kicker">04 / Environment</div><h2>把第一段 Python 跑起来</h2><p>Python 文件通常以 <code>.py</code> 结尾。终端里的命令负责启动程序；Python 框里的代码要放进 Python 文件或 Notebook 单元，不要把两种语言混在一起运行。本讲推荐 Python 3.10 及以上；SQLite 随 Python 标准库提供，无需另装数据库服务。</p>
+<pre data-label="Windows / 在仓库根目录执行"><code class="language-shell">python --version
+python -m venv .venv
+# Windows 使用虚拟环境里的解释器，不依赖激活脚本
+.venv\Scripts\python -m pip install -r extras/lecture-02/requirements.txt
+.venv\Scripts\python extras/lecture-02/lab.py --output work/lecture-02-run</code></pre>
+<div class="explain"><ol><li><code>--version</code> 查看解释器版本；如果命令指向系统应用商店，请先正确安装 Python 并重开终端。</li><li><code>venv</code> 创建独立环境，避免课程依赖影响其他项目。</li><li><code>-m pip</code> 让当前解释器安装依赖；离线实操只依赖 pandas，不要求先装 AkShare。</li><li>最后一行运行完整实验，输出到你指定的目录。第一次可先完整跑通，再按章节理解每个步骤。</li></ol></div>
+<pre data-label="macOS / Linux / 在仓库根目录执行"><code class="language-shell">python3 -m venv .venv
+.venv/bin/python -m pip install -r extras/lecture-02/requirements.txt
+.venv/bin/python extras/lecture-02/lab.py --output work/lecture-02-run</code></pre>
+<h3>一分钟语法入门</h3>
+<pre data-label="独立运行 / 语法热身"><code class="language-python">import pandas as pd                    # 1. 导入表格工具，简称 pd
+prices = pd.DataFrame({                # 2. 字典的键是列名，值是一列数据
+    &quot;symbol&quot;: [&quot;SIM001&quot;, &quot;SIM001&quot;],
+    &quot;close&quot;: [100.0, 105.0],
+})
+prices[&quot;change&quot;] = prices[&quot;close&quot;] / 100 - 1  # 3. 整列计算并新增列
+print(prices.head())                    # 4. 显示前几行
+print(prices.shape)                     # 5. 查看（行数，列数）</code></pre>
+<div class="explain"><p><code>import</code> 导入工具；<code>=</code> 是赋值；<code>["close"]</code> 取出整列；<code>.</code> 访问对象的方法或属性；括号表示调用方法。计算可作用于一整列，通常不必逐格写循环。<code>#</code> 后面是注释，不会被执行。这个小表只有模拟价格，没有日期，仅用于熟悉语法。</p></div><aside class="callout warning"><strong>常见环境错误</strong><p><code>ModuleNotFoundError</code> 常意味着“装包的解释器”和“运行代码的解释器”不同；检查两条命令是否都使用同一个 <code>.venv</code> 路径。复制代码时保留英文引号和缩进，不要把中文引号带入代码。</p></aside></section>
+<section id="acquire" class="chapter"><div class="section-kicker">05 / Acquisition</div><h2>用 AkShare 采集，先保存，再加工</h2><p>AkShare 是 Python 金融数据工具库。本讲使用的 <code>stock_zh_a_hist</code> 文档标明来源为东方财富，支持日线与不复权、前复权、后复权参数。免费接口的网络、上游页面和字段都可能变化；“今天能取到”不意味着永远稳定，所以采集必须保存参数与返回快照。</p><p>以下是<strong>联网选做</strong>。在仓库根目录使用课程环境安装 AkShare。代码只请求一个真实股票、一个短时间区间，避免一开始批量抓取。接口说明见 <a href="https://akshare.akfamily.xyz/data/stock/stock_quote.html" target="_blank" rel="noopener">AkShare 官方文档 ↗</a>，在页内搜索 <code>stock_zh_a_hist</code>。</p>
+<pre data-label="Windows / 联网选做"><code class="language-shell">.venv\Scripts\python -m pip install akshare
+.venv\Scripts\python extras/lecture-02/collect_akshare.py --symbol 601318 --start 20250620 --end 20250704 --output work/pingan-snapshot-01</code></pre>
+<p class="inline-note">macOS / Linux 将解释器路径换成 <code>.venv/bin/python</code>。输出目录必须不存在；再次采集请换新目录，保留前次快照。</p><h3>把核心请求拆开看</h3>
+<pre data-label="核心请求示例 / 会写入 work/pingan_raw_example.csv"><code class="language-python">from pathlib import Path                            # 1. 处理文件路径
+import akshare as ak                                # 2. 导入采集工具
+
+raw = ak.stock_zh_a_hist(                            # 3. 请求历史行情
+    symbol=&quot;601318&quot;,                                # 4. 六位代码是字符串
+    period=&quot;daily&quot;,                                 # 5. 日频
+    start_date=&quot;20250620&quot;, end_date=&quot;20250704&quot;,      # 6. 日期区间
+    adjust=&quot;&quot;,                                      # 7. 空串表示不复权
+)
+required = {&quot;日期&quot;, &quot;开盘&quot;, &quot;最高&quot;, &quot;最低&quot;, &quot;收盘&quot;, &quot;成交量&quot;, &quot;成交额&quot;}
+if raw.empty or not required.issubset(raw.columns):  # 8. 先验证返回结构
+    raise RuntimeError(&quot;空数据或字段发生变化，请核查接口&quot;)
+print(raw.head())                                   # 9. 看真实返回，不预设结果
+Path(&quot;work&quot;).mkdir(exist_ok=True)
+raw.to_csv(&quot;work/pingan_raw_example.csv&quot;,            # 10. 保存原始返回
+           index=False, encoding=&quot;utf-8-sig&quot;)</code></pre>
+<div class="explain"><p>第1–2行导入工具；第3–7行把研究对象、频率、时间和价格口径写成显式参数。第8行防止空结果或接口改字段后继续执行。第9行只展示实际返回。最后保存 UTF-8 CSV，<code>index=False</code> 避免额外写入表格行号。此短例再次运行会覆盖同名演示文件；需要不可变快照时使用上方完整采集脚本。</p></div><h3>标准化字段时，单位要写进转换规则</h3>
+<pre data-label="承接核心请求 / 需先 import pandas as pd"><code class="language-python">rename_map = {&quot;日期&quot;: &quot;trade_date&quot;, &quot;开盘&quot;: &quot;open&quot;, &quot;最高&quot;: &quot;high&quot;,
+              &quot;最低&quot;: &quot;low&quot;, &quot;收盘&quot;: &quot;close&quot;, &quot;成交量&quot;: &quot;volume&quot;,
+              &quot;成交额&quot;: &quot;amount&quot;}                   # 1. 固定映射
+df = raw.rename(columns=rename_map)[list(rename_map.values())].copy()
+df[&quot;symbol&quot;] = &quot;601318&quot;                             # 2. 接口按单股取数，补上代码
+df[&quot;trade_date&quot;] = pd.to_datetime(df[&quot;trade_date&quot;], errors=&quot;raise&quot;)
+for col in [&quot;open&quot;, &quot;high&quot;, &quot;low&quot;, &quot;close&quot;, &quot;volume&quot;, &quot;amount&quot;]:
+    df[col] = pd.to_numeric(df[col], errors=&quot;raise&quot;)  # 3. 明确数值列
+df[&quot;volume&quot;] = df[&quot;volume&quot;] * 100                    # 4. 手 → 股
+df = df.sort_values([&quot;symbol&quot;, &quot;trade_date&quot;]).reset_index(drop=True)</code></pre>
+<div class="explain"><p>第1行建立来源字段与内部字段的对应关系，挑出需要的列，不把所有上游列都当成稳定接口。第2行补代码，不从数值型股票代码猜前导零。第3步使用 <code>errors="raise"</code>，遇到脏字符立即停下。第4步只做一次单位转换；应在元数据中记录转换前后单位，避免重复乘100。最后用股票与日期排序。</p></div><h3>完整采集脚本比短例多做了什么？</h3><ul><li>分别请求 raw 与 hfq，分文件保留，避免混合口径；不对已有目录静默覆盖。</li><li>记录股票、起止日、频率、价格调整、来源、UTC采集时间、Python / pandas / AkShare版本。</li><li>对每份 CSV 记录行数和 SHA-256，帮助判断两次研究是否使用同一快照。</li><li>检查空表、字段变化和重复日期；请求失败直接报错。它不自动证明行情正确，后续仍须质量检查。</li></ul><aside class="callout warning"><strong>请求失败时怎么处理？</strong><p>先保留报错，检查网络、参数、接口文档和版本；不要把空表补成零价格，不要无限重试。若要批量采集，设置有限重试、等待间隔与失败清单，成功文件缓存复用。课程可继续走离线路线，无需把模拟文件改名成真实行情。</p></aside></section>
+<section id="inspect" class="chapter"><div class="section-kicker">06 / First inspection</div><h2>读取表格，先确认类型与覆盖范围</h2><p>CSV 看起来像表格，文件本身并不保证“代码是字符串、日期真的是日期”。例如 <code>000001</code> 若被读成整数1，信息就已经损失；<code>2025/13/40</code> 只是一个字符串，必须在转换时被识别出来。第一次读取不要急着画收益曲线，先检查结构。</p>
+<pre data-label="独立运行 / 读取检查热身"><code class="language-python">from io import StringIO
+import pandas as pd
+
+text = &quot;&quot;&quot;symbol,trade_date,open,high,low,close,volume,amount
+SIM001,2024-01-03,10.0,10.5,9.9,10.4,120000,1236000
+SIM001,2024-01-02,9.8,10.1,9.7,10.0,100000,990000
+SIM002,2024-01-02,20.0,20.3,19.8,20.1,80000,1604000
+&quot;&quot;&quot;                                                  # 1. 独立模拟小表
+df = pd.read_csv(StringIO(text), dtype={&quot;symbol&quot;: &quot;string&quot;})
+df[&quot;trade_date&quot;] = pd.to_datetime(df[&quot;trade_date&quot;], errors=&quot;raise&quot;)
+print(df.head())                                      # 2. 看值
+print(df.dtypes)                                      # 3. 看类型
+print(df.shape)                                       # 4. 应为 (3, 8)
+print(df.isna().sum())                                 # 5. 每列缺失数
+print(df.groupby(&quot;symbol&quot;)[&quot;trade_date&quot;].agg([&quot;min&quot;, &quot;max&quot;, &quot;count&quot;]))
+df = df.sort_values([&quot;symbol&quot;, &quot;trade_date&quot;]).reset_index(drop=True)</code></pre>
+<div class="explain"><ol><li><code>StringIO</code> 把文本作为一个内存文件，保证你无需先下载 CSV 即可运行。真实文件时将其换成文件路径，例如 <code>pd.read_csv("prices.csv", dtype={"symbol":"string"})</code>。</li><li><code>head()</code> 只抽看前几行，不能代替全表验证；<code>dtypes</code> 检查文本、日期和数值是否合适。</li><li><code>shape</code> 返回行列数；<code>isna().sum()</code> 给出逐列缺失计数，零不是缺失。</li><li><code>groupby</code> 按股票分组，<code>agg</code> 同时求最早日、最晚日、记录数。不同股票覆盖范围不一致，先解释原因，再决定样本区间。</li><li>最后排序并重建0开始的行索引。行索引只是 pandas 的位置标签，不是股票行情主键。</li></ol></div><h3>检查顺序可以固定下来</h3><div class="table-wrap"><table><thead><tr><th>层次</th><th>问题</th><th>看什么</th></tr></thead><tbody><tr><td>结构</td><td>列是否齐全？一行是什么粒度？</td><td>columns、shape、字段字典</td></tr><tr><td>类型</td><td>代码、日期、数值是否正确解析？</td><td>dtypes、无法解析记录清单</td></tr><tr><td>主键</td><td>同股同日是否只有一行？</td><td>duplicated([symbol, trade_date])</td></tr><tr><td>时间</td><td>排序正确吗？覆盖区间合理吗？</td><td>分股 min / max / count、交易日历</td></tr><tr><td>经济含义</td><td>价格与量额是否符合定义？</td><td>OHLC关系、单位、事件与状态</td></tr></tbody></table></div><p>字符串 <code>"--"</code>、空白和 <code>"N/A"</code> 是否应作缺失值，要在读取规则中说明。不要一律把无法解析的字符变成0；0元价格与未知价格具有完全不同的金融含义。</p></section>
+<section id="clean" class="chapter"><div class="section-kicker">07 / Cleaning policy</div><h2>清洗不是“删到没有报错”</h2><p>数据清洗最关键的部分是决策：什么确定是错误，什么只是可疑？本讲离线脚本使用保守规则：无法解析、关键值缺失或逻辑不可能的记录进入隔离表；完全相同的重复保留一份；同股同日数值冲突的记录全部隔离。这样我们可以从质量报告追查每一行去了哪里。</p><h3>先排序，再辨认重复，但别用排序替代证据</h3>
+<pre data-label="承接检查小表 / 实际小表无重复，注入错误后观察变化"><code class="language-python">key = [&quot;symbol&quot;, &quot;trade_date&quot;]
+value_cols = key + [&quot;open&quot;, &quot;high&quot;, &quot;low&quot;, &quot;close&quot;, &quot;volume&quot;, &quot;amount&quot;]
+exact = df.duplicated(subset=value_cols, keep=&quot;first&quot;) # 1. 完全相同的额外副本
+exact_rejects = df.loc[exact].copy()                   # 2. 留下隔离证据
+unique_rows = df.loc[~exact].copy()
+conflict = unique_rows.duplicated(subset=key, keep=False)
+conflict_rejects = unique_rows.loc[conflict].copy()     # 3. 冲突键的全部行
+candidate = unique_rows.loc[~conflict].copy()
+candidate = candidate.sort_values(key).reset_index(drop=True)</code></pre>
+<div class="explain"><p><code>duplicated(..., keep="first")</code> 把完全相同的第二份及以后标为 True。<code>~</code> 是取反，<code>.loc[条件]</code> 按条件选行。去掉精确副本后，再按业务主键找冲突；<code>keep=False</code> 将冲突的两份都标出来。<code>copy()</code> 明确产生独立结果，避免边修改边引用原表。</p></div><p>如果供应商明确提供修订版本、发布时间或优先级，才可按书面规则选择最新有效版本，并保留旧版。随手 <code>drop_duplicates(key, keep="last")</code> 只意味着“保留文件里碰巧排最后的那行”，不能证明那行更正确。</p><h3>关键值、OHLC 与非有限数</h3>
+<pre data-label="承接 candidate / 原始价专用规则"><code class="language-python">numeric = [&quot;open&quot;, &quot;high&quot;, &quot;low&quot;, &quot;close&quot;, &quot;volume&quot;, &quot;amount&quot;]
+for col in numeric:
+    candidate[col] = pd.to_numeric(candidate[col], errors=&quot;coerce&quot;)
+required_missing = candidate[key + numeric].isna().any(axis=1)
+finite = candidate[numeric].apply(
+    lambda col: col.map(lambda x: pd.notna(x) and float(&quot;-inf&quot;) &lt; x &lt; float(&quot;inf&quot;))
+).all(axis=1)
+positive_price = (candidate[[&quot;open&quot;, &quot;high&quot;, &quot;low&quot;, &quot;close&quot;]] &gt; 0).all(axis=1)
+ohlc_ok = (candidate[&quot;high&quot;] &gt;= candidate[[&quot;open&quot;, &quot;close&quot;, &quot;low&quot;]].max(axis=1)) &amp; (
+    candidate[&quot;low&quot;] &lt;= candidate[[&quot;open&quot;, &quot;close&quot;]].min(axis=1))
+nonnegative = (candidate[[&quot;volume&quot;, &quot;amount&quot;]] &gt;= 0).all(axis=1)
+valid = ~required_missing &amp; finite &amp; positive_price &amp; ohlc_ok &amp; nonnegative
+rejected = candidate.loc[~valid].copy()
+clean = candidate.loc[valid].sort_values(key).reset_index(drop=True)</code></pre>
+<div class="explain"><p><code>errors="coerce"</code> 把无法解析的数值变成缺失，方便统一识别；生产脚本要先保存原始字符串及行号。<code>any(axis=1)</code> 问“这一行是否至少一列缺失”；<code>all(axis=1)</code> 问“这一行是否所有列都满足”。无限大也是错误，即使它不是 NaN。OHLC检查允许平盘和一字价，比较用 ≥ / ≤。最后把无效行与有效行分开。完整实验还记录具体原因；不要只保留一个总布尔值。</p></div><h3>缺失、停牌和零成交量，必须分开理解</h3><div class="table-wrap"><table class="wide"><thead><tr><th>观察到的现象</th><th>可能原因</th><th>可采取的动作</th><th>不要直接做</th></tr></thead><tbody><tr><td>日期不在交易日历</td><td>周末、法定休市</td><td>作为非交易日处理，不生成行情。</td><td>按自然日插值生成价格。</td></tr><tr><td>市场开市，个股缺行</td><td>停牌、未上市、退市、漏采或来源遗漏</td><td>关联当时证券状态与停牌表；未确认前标记原因未知。</td><td>仅凭缺行就断言停牌。</td></tr><tr><td>关键 close 缺失</td><td>解析或上游数据问题</td><td>隔离，重新获取并核对来源。</td><td>将它填成0或用未来价格回填。</td></tr><tr><td>volume = 0</td><td>特定状态记录、供应商补行</td><td>联查来源定义、停牌状态和 amount，明确是否可交易。</td><td>把“有价格”当成“可成交”。</td></tr></tbody></table></div><p>用于持仓估值时，研究者可能按已声明规则沿用最近可用价格，同时把 <code>is_tradable=False</code>；这与创建一条可供下单的真实行情不同。停牌期间能否交易、复牌后收益归属和风险统计，应在回测层再作明确处理。</p><h3>异常收益：先标记调查，别自动截断</h3><p>某日价格跳变可能来自错价、除权除息、合并重组、上市初期或真实市场变化。固定的“超过10%就是错”不适用于所有市场、板块和历史时期。本讲可设置一个<strong>诊断阈值</strong>，例如绝对观测间收益超过30%时加入待复核清单；它不是现行涨跌停规则，更不应自动删掉或缩尾。</p><aside class="callout warning"><strong>清洗也会制造偏差</strong><p>只保留“看上去正常、一直交易、未来未退市”的股票，会让样本更容易取得好结果。每条排除规则都要说明经济原因、影响行数和对研究结论的可能影响。</p></aside></section>
+<section id="pandas" class="chapter"><div class="section-kicker">08 / Features without leakage</div><h2>groupby、shift、rolling：让计算留在正确时间线上</h2><p>这三个工具可以读成一句话：<strong>先按股票分组，再向后看，最后在历史窗口内计算。</strong>执行前必须确认主键唯一、日期有效并已排序。否则公式正确，窗口里装的仍可能是错误的记录。</p><h3>1. groupby：把不同股票的计算隔开</h3>
+<pre data-label="承接 clean / 分组摘要"><code class="language-python">clean = clean.sort_values([&quot;symbol&quot;, &quot;trade_date&quot;]).reset_index(drop=True)
+g = clean.groupby(&quot;symbol&quot;, sort=False)              # 1. 每只股票一组
+summary = g.agg(n_obs=(&quot;close&quot;, &quot;count&quot;),             # 2. 每组有效价格数
+                first_date=(&quot;trade_date&quot;, &quot;min&quot;),
+                last_date=(&quot;trade_date&quot;, &quot;max&quot;),
+                total_volume=(&quot;volume&quot;, &quot;sum&quot;))
+print(summary)</code></pre>
+<div class="explain"><p><code>sort=False</code> 控制分组键的排序，不负责整理每组内的日期；前面的 <code>sort_values</code> 才负责时间顺序。<code>agg</code> 把多行聚合成每股一行，给结果起易懂的列名。成交量按组求和有意义，而“收盘价求和”通常不对应你想要的金融问题。</p></div><h3>2. shift：拿到这只股票的上一条已知记录</h3>
+<pre data-label="承接已排序 clean / 观测间价格收益"><code class="language-python">clean[&quot;prev_close&quot;] = g[&quot;close&quot;].shift(1)             # 1. 组内向后移动一行
+clean[&quot;prev_date&quot;] = g[&quot;trade_date&quot;].shift(1)
+clean[&quot;return_observed&quot;] = clean[&quot;close&quot;] / clean[&quot;prev_close&quot;] - 1
+print(clean[[&quot;symbol&quot;, &quot;trade_date&quot;, &quot;close&quot;, &quot;prev_close&quot;, &quot;return_observed&quot;]])</code></pre>
+<div class="equation">r<sub>t</sub> = P<sub>t</sub> / P<sub>prev</sub> − 1<small>prev 指同一股票上一条有效观测。它只有在数据连续覆盖交易日时，才可解释为相邻交易日价格收益。</small></div><div class="explain"><p><code>shift(1)</code> 将上一行价格对齐到当前行。每只股票首行没有前值，应保留缺失，不能填0。105除以100减1得到0.05，即5%，不是5。缺口前后这两条记录之间的收益可能跨多个交易日；应通过交易日历另行识别，而不是把它冒称单日收益。</p></div><h3>3. rolling：只使用窗口内的历史</h3>
+<pre data-label="承接 clean / 5与20条观察窗口"><code class="language-python">clean[&quot;ma5&quot;] = clean.groupby(&quot;symbol&quot;)[&quot;close&quot;].transform(
+    lambda s: s.rolling(window=5, min_periods=5).mean())
+clean[&quot;ma20&quot;] = clean.groupby(&quot;symbol&quot;)[&quot;close&quot;].transform(
+    lambda s: s.rolling(window=20, min_periods=20).mean())
+clean[&quot;momentum_20obs&quot;] = clean[&quot;close&quot;] / clean.groupby(&quot;symbol&quot;)[&quot;close&quot;].shift(20) - 1
+# 在 t 日收盘后才能确认的 ma5，最早留到下一条观测作信号演示
+clean[&quot;ma5_lag1&quot;] = clean.groupby(&quot;symbol&quot;)[&quot;ma5&quot;].shift(1)</code></pre>
+<div class="explain"><ol><li><code>transform</code> 让每组计算的结果保持与原表同样长度和索引，减少直接 <code>groupby().rolling()</code> 产生多层索引后的误对齐。</li><li><code>lambda s:</code> 定义“对这一组价格 s 做什么”；窗口5表示最近5条观测，包含当前行。<code>min_periods=5</code> 要求完整窗口，前4条留空。</li><li>MA20需要20个价格；20期动量 <code>P_t/P_(t−20)−1</code> 需要21个价格。两者的起始位置不同，别因为都含20就当作同一种边界。</li><li><code>ma5_lag1</code> 将收盘后已知指标向后移一条观测，示意时间对齐；它不保证能在下一次开盘成交。真实回测还需交易日历、信号时间、停牌与撮合规则。</li></ol></div><div class="equation">MA<sub>n,t</sub> = (P<sub>t</sub> + P<sub>t−1</sub> + … + P<sub>t−n+1</sub>) / n<small>本讲 n 为观测数；整数窗口与按时间跨度的 rolling("20D") 含义不同，20个自然日也不同于20个交易日。</small></div><div class="chart-panel"><div class="chart-head"><h3>动手切换：窗口越长，会发生什么？</h3><span class="badge">模拟教学 · 30条观测</span></div><div class="chart-controls" role="group" aria-label="选择均线观察窗口"><button type="button" data-window="5" aria-pressed="true">5 条</button><button type="button" data-window="10" aria-pressed="false">10 条</button><button type="button" data-window="20" aria-pressed="false">20 条</button></div><svg id="rolling-chart" viewBox="0 0 700 255" role="img" aria-labelledby="rolling-chart-title rolling-chart-desc"><title id="rolling-chart-title">模拟收盘价与历史均线</title><desc id="rolling-chart-desc">30条模拟价格与滚动均线。启用JavaScript后可以切换窗口。</desc><g class="plot"></g></svg><noscript><p>交互需 JavaScript。手算示例：100、102、101、103、104 的5条均线为102；前4条没有完整窗口。</p></noscript><div class="legend"><span>模拟收盘价</span><span class="gold"><b id="ma-window">5</b> 条滚动均线</span></div><div class="metric-row"><div class="metric">最后一条均线<strong id="ma-last">—</strong></div><div class="metric">首次完整窗口<strong id="ma-first">第5条</strong></div><div class="metric">窗口方向<strong>仅向后看</strong></div></div><p id="chart-status" class="status" aria-live="polite"></p><p class="caption">数列由公式 20 + 0.16i + 0.8sin(0.65i) 生成并保留2位小数，i=0…29。单位是假设的元/股。图形用于理解窗口，不表示预测能力。</p></div><h3>时间对齐检查：这行数据当时真的知道吗？</h3><p>如果在 t 日收盘前作决策，当天最终 close 和全天 volume 尚未确定。用当天最终数据计算信号，再声称按当天收盘价无摩擦成交，可能包含前视。<code>rolling(center=True)</code> 也会把未来点放进中心窗口，不适合历史时点的可交易特征。</p><p><code>shift(-1)</code> 获取下一条观测，可用于构造未来收益标签；标签用于研究检验，不能进入当时的选股特征。特征和标签都写在一张表里时，建议前缀明确并在建模前按允许字段白名单取列。</p><details><summary>常见错误：直接 clean["close"].shift(1)</summary><p>全表 shift 会在 SIM002 首行接到 SIM001 的最后价格，造成跨股票收益。全表 rolling 也会把两只股票混入同一个均线窗口。只要一张表有多只股票，就先按 symbol 分组；每次计算后检查每组首行的前值是否为缺失。</p></details></section>
+<section id="sql" class="chapter">
+  <div class="section-kicker">09 / STORE &amp; QUERY</div>
+  <h2>把数据存进 SQLite，再用 SQL 提问</h2>
+  <p class="lead">CSV 像一叠独立表格，数据库则为表格增加结构、约束与查询语言。本章把刚才清洗后的行情保存下来，并用 Python 与 SQL 两种方式回答同一个问题。</p>
+  <p>SQLite 把一个数据库保存在本地文件中，不需要先搭建服务器。Python 自带的 <code>sqlite3</code> 模块便可连接它。对本课程的小型研究任务，这让我们能把精力放在数据含义上。数据库文件不是自动可信的：如果直接把错误数据写进去，SQL 也会认真地计算错误结果。</p>
+  <aside class="callout"><strong>运行范围。</strong>本章查询针对本讲实操生成的 <code>prices</code> 与 <code>securities</code> 两张表。<code>SIM001</code>、<code>SIM002</code> 是虚构证券；行情为模拟原始价，计算的是不含分红和成本的价格收益。代码中的日期是教学查询条件；想覆盖全部数据时，可去掉日期条件。</aside>
+
+<h3>先连上数据库：把 SQL 放在哪里运行？</h3><p>先按“准备环境”一章运行完整离线实验，再将下方代码保存为仓库根目录的 <code>query_example.py</code>，用同一个 Python 环境运行。数据库已经由实验脚本建好；后续 SQL 框的查询可以替换下方三引号中的内容，查询原表不会改变数据。</p><pre data-label="独立运行 / 先完成离线lab"><code class="language-python">from contextlib import closing                       # 1. 结束后关闭连接
+from pathlib import Path
+import sqlite3
+import pandas as pd
+
+db = Path("work/lecture-02-run/research_simulated.sqlite")
+if not db.is_file():                                 # 2. 防止错路径创建空数据库
+    raise FileNotFoundError("请先运行 lab.py，并核对输出目录")
+# 3. 把本章查询放在三引号内
+query = """
+SELECT symbol, trade_date, close
+FROM prices
+ORDER BY symbol, trade_date
+LIMIT 5;
+"""
+with closing(sqlite3.connect(db)) as con:             # 4. 打开已有实验库
+    result = pd.read_sql_query(query, con)            # 5. 查询结果转成表格
+    print(result.to_string(index=False))             # 6. 展示结果
+</code></pre><div class="explain"><p>第1步管理连接的关闭；第2步核实数据库确实存在，因为 SQLite 遇到不存在的文件路径可能创建一个空库。第3步用三引号容纳多行 SQL，通常一次运行一条 SELECT；第4–6步连接、查询并显示结果。若你的 lab 使用其他 <code>--output</code>，同步修改这里的路径。本章的建表框用于解释结构，已有实验库无需重建；建表或批量写入应使用 <code>execute / executescript</code> 并在事务中提交，完整写法见 <a href="lab.py">lab.py</a>。</p></div>  <h3>9.1 先确定“一行是什么”</h3>
+  <p>这张行情表的粒度是<strong>一只股票、一个交易日期、一种已经确定的价格口径</strong>。例如同一日期可以同时存在 SIM001 和 SIM002，但同一只股票同一天不能出现两行。这个约定比表名更重要，因为所有统计都建立在它上面。</p>
+  <div class="table-wrap"><table><thead><tr><th>表</th><th>一行的含义</th><th>唯一标识</th><th>用途</th></tr></thead><tbody><tr><td><code>prices</code></td><td>某只股票某天的模拟原始日线</td><td><code>(symbol, trade_date)</code></td><td>收益、均线、成交额与数据质量</td></tr><tr><td><code>securities</code></td><td>一只虚构证券的描述</td><td><code>symbol</code></td><td>名称、行业等说明字段</td></tr></tbody></table></div>
+  <p>主键（PRIMARY KEY）可以理解为每一行的身份证。这里用两列共同组成主键：仅用日期会把不同股票挤在一起，仅用代码又无法保存多天行情。在真实研究库里，如果同表容纳多个数据源、复权口径或修订版本，唯一键还需要包括相应的维度；本课程通过“一次离线运行只含一种口径”简化问题。</p>
+  <pre><code class="language-sql">-- 01 股票说明表：每个代码最多对应一行
+CREATE TABLE IF NOT EXISTS securities (
+    symbol TEXT NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    industry TEXT
+);
+
+-- 02 行情表：价格为正，数量非负，交易日必须有值
+CREATE TABLE IF NOT EXISTS prices (
+    symbol TEXT NOT NULL,
+    trade_date TEXT NOT NULL,
+    open REAL NOT NULL CHECK (open &gt; 0),
+    high REAL NOT NULL CHECK (high &gt; 0),
+    low REAL NOT NULL CHECK (low &gt; 0),
+    close REAL NOT NULL CHECK (close &gt; 0),
+    volume REAL NOT NULL CHECK (volume &gt;= 0),
+    amount REAL NOT NULL CHECK (amount &gt;= 0),
+    PRIMARY KEY (symbol, trade_date),
+    CHECK (low &lt;= open AND low &lt;= close),
+    CHECK (high &gt;= open AND high &gt;= close AND high &gt;= low)
+);
+
+-- 03 跨股票按日期查询时可使用这个索引
+CREATE INDEX IF NOT EXISTS idx_prices_date ON prices(trade_date);</code></pre>
+  <ol class="line-notes"><li><strong>01：</strong><code>TEXT</code> 保存代码、名称和行业。代码使用字符串，才能保留 A 股代码开头的零。<code>industry</code> 允许未知，未知应写成 NULL，而非凭空编一个行业。</li><li><strong>02：</strong><code>REAL</code> 用于本课的浮点计算，<code>NOT NULL</code> 拒绝缺失关键字段，<code>CHECK</code> 拒绝价格小于等于零、负成交量和不可能的最高最低价组合。日期统一保存为 <code>YYYY-MM-DD</code> 文本，这样同格式字符串的顺序与日期顺序一致；日期合法性仍在清洗阶段验证。</li><li><strong>复合主键：</strong>重复插入同一个代码与日期会报错。不要用 <code>INSERT OR IGNORE</code> 把冲突静默吞掉，也不要把未经检查的 <code>to_sql(if_exists="replace")</code> 用在已有约束的正式表上；后者会重建表，可能失去原有约束。</li><li><strong>03：</strong>索引像书的目录，能帮助定位记录，也占用空间并增加写入成本。主键已经覆盖以代码开头的定位，本课额外演示日期索引；真实项目应结合查询方式和执行计划决定，不需要给每列都建索引。</li></ol>
+  <p>以上展示核心教学结构；完整实操还保存 <code>adjustment</code>、<code>source</code> 和 <code>is_simulated</code>，并约束模拟数据标识、原始价口径及证券外键。已有实操数据库可以直接运行后续查询，不需要重建表。SQLite 的列类型与约束有自己的规则；本课把关键列明确写为 <code>NOT NULL</code>，不依赖“主键名字听起来就一定不为空”的直觉。进一步阅读：<a href="https://www.sqlite.org/lang_createtable.html" target="_blank" rel="noopener">SQLite 建表与约束文档</a>。</p>
+
+  <h3>9.2 SELECT：像提问一样写查询</h3>
+  <p>先把问题用中文说完整：“找出 SIM001 在指定日期内的行情，只看日期、收盘价与成交量，按日期从早到晚排列。”然后再逐句翻译。<code>SELECT</code> 选列，<code>FROM</code> 指定表，<code>WHERE</code> 筛行，<code>ORDER BY</code> 排序。</p>
+  <pre><code class="language-sql">-- 01 只取本问题需要的列
+SELECT symbol, trade_date, close, volume
+-- 02 指定行情表
+FROM prices
+-- 03 先选择股票，再选择日期范围；BETWEEN 包含两个端点
+WHERE symbol = 'SIM001'
+  AND trade_date BETWEEN '2024-01-01' AND '2024-02-29'
+-- 04 显式排序，不依赖数据库碰巧返回的顺序
+ORDER BY trade_date ASC;</code></pre>
+  <p class="code-explain"><strong>逐行理解：</strong>01 决定输出列，不改变底层数据；02 告诉数据库去哪里找；03 要求条件同时成立，字符串用单引号；04 的 <code>ASC</code> 是升序，换成 <code>DESC</code> 即倒序。不写 <code>ORDER BY</code> 时，不能把返回顺序当作时间顺序；这对收益计算尤其关键。查询返回零行通常先检查代码、日期格式和数据覆盖范围，不要立刻认定接口失效。</p>
+  <p>在 Python 中把用户输入传给查询时，使用参数占位符。参数是“数据”，不应该被拼接成 SQL 语法。</p>
+  <pre><code class="language-python"># 01 con 是已打开的 sqlite3 连接
+sql = "SELECT trade_date, close FROM prices WHERE symbol = ? ORDER BY trade_date"
+# 02 逗号让括号中的一个值构成单元素元组
+rows = con.execute(sql, ("SIM001",)).fetchall()
+# 03 只展示前五行，避免把全部结果挤满屏幕
+print(rows[:5])</code></pre>
+  <p class="code-explain"><strong>逐行理解：</strong>01 的问号是值的位置，不是列名或表名的位置；02 由数据库驱动处理引号与类型，<code>("SIM001",)</code> 末尾的逗号不可省略；03 展示查询结果的切片。用 f-string 拼接代码或日期会带来引号错误与注入风险。表名若要动态选择，应使用程序预先允许的名单，不能用一个问号代替表名。</p>
+
+  <h3>9.3 GROUP BY：把每天的行归纳成每只股票的统计</h3>
+  <p>现在换一个问题：“每只股票有多少条有效记录，覆盖哪些日期，平均日成交额是多少？”查询的粒度从“股票×日期”变成了“股票”。<code>GROUP BY</code> 会把同一股票的多行放进一组，再让 COUNT、MIN、MAX、AVG 对每组计算。</p>
+  <pre><code class="language-sql">-- 01 每只股票输出一行，给计算结果起一个清晰名字
+SELECT symbol,
+       COUNT(*) AS n_rows,
+       COUNT(amount) AS n_amount,
+       MIN(trade_date) AS first_date,
+       MAX(trade_date) AS last_date,
+       AVG(amount) AS avg_amount
+-- 02 WHERE 在分组之前筛选原始行
+FROM prices
+WHERE trade_date &gt;= '2024-01-01'
+-- 03 按代码形成分组
+GROUP BY symbol
+-- 04 HAVING 在分组之后筛选统计结果
+HAVING COUNT(*) &gt;= 20
+-- 05 稳定排序；平均成交额相同时用代码决定先后
+ORDER BY avg_amount DESC, symbol ASC;</code></pre>
+  <p class="code-explain"><strong>逐行理解：</strong>01 中 <code>COUNT(*)</code> 数所有行，<code>COUNT(amount)</code> 只数成交额不为 NULL 的行；本课干净表要求成交额不为空，两者应相等。02 把研究区间限制在分组前；03 决定一组是什么；04 只留下至少有 20 行的股票；05 决定展示顺序。<code>AS</code> 只是给结果起别名，不会修改原表字段。</p>
+  <aside class="callout warning"><strong>NULL 不是零，也不是空字符串。</strong>NULL 表示未知或缺失；用 <code>IS NULL</code> 检查，不能写 <code>= NULL</code>。AVG、SUM 等聚合通常跳过 NULL，因此均值必须同时报告有效样本数。把缺失成交额直接填零，会把“没有拿到数据”写成“当天没有成交”，改变结论。</aside>
+  <p>不要写 <code>SELECT symbol, trade_date, AVG(close) FROM prices GROUP BY symbol</code>，再把输出日期误认为均值对应的日期。一个股票组中有许多日期，未被分组或聚合的日期没有明确统计含义。若目标是“最新收盘价”，应该使用下一节的行排名；若目标是“区间均价”，就清楚命名为区间均价。跨股票比较价格水平通常也没有直接的投资意义；这里的 SQL 练习是在学习查询，不是在证明某只股票更值得买。</p>
+  <p>WHERE 回答“哪些原始行参加计算”，HAVING 回答“哪些分组结果值得保留”。例如筛选成交额大于某值的日子，应放 WHERE；筛选平均日成交额大于某值的股票，应放 HAVING。两者交换位置会回答不同的问题。</p>
+
+  <h3>9.4 LEFT JOIN：把名字接上，也把未知保留下来</h3>
+  <p>行情表专心保存数值，证券说明表保存名称和行业。要做一张“行情+名称”的表，需要按代码连接。左连接会保留左表的每一行：右表找不到代码时，名称与行业返回 NULL，让缺口暴露出来，而不是悄悄让行情消失。</p>
+  <pre><code class="language-sql">-- 01 p 和 s 是两张表的短别名，用来说明字段来自哪里
+SELECT p.symbol, p.trade_date, p.close,
+       s.name, s.industry
+-- 02 prices 放在左侧，它的行需要保留
+FROM prices AS p
+-- 03 按证券代码匹配右表，匹配不到时右侧字段为 NULL
+LEFT JOIN securities AS s ON p.symbol = s.symbol
+-- 04 这里只筛左表条件，不把缺失的右表记录排除
+WHERE p.trade_date &gt;= '2024-01-01'
+ORDER BY p.symbol, p.trade_date;</code></pre>
+  <p class="code-explain"><strong>逐行理解：</strong>01 选取想要的数值与说明字段；02 确定保留的是行情；03 声明连接键；04 只限制行情日期。若加上 <code>WHERE s.industry = '示例行业'</code>，未知行业行会被筛掉，因为 NULL 不能满足这个条件。如果目的是“仍保留所有行情，只匹配某类右表记录”，应把右表限制写进 ON 条件，并明确此时未匹配与不属于该行业都会显示为空。若目的是确实只研究某行业，则 WHERE 是有意的筛选，需要报告样本变化。</p>
+  <p>另一个危险比漏行更隐蔽：右表如果同一代码有两行，左表每一条行情就可能被复制两遍，成交额汇总也随之翻倍。<strong>连接前先检查键唯一，连接后再检查行数与键唯一。</strong>不要用 DISTINCT 随手抹平连接问题，因为它可能同时掩盖了错误的表粒度。</p>
+  <pre><code class="language-sql">-- 01 右表代码唯一时，这个检查应返回零行
+SELECT symbol, COUNT(*) AS n
+FROM securities
+GROUP BY symbol
+HAVING COUNT(*) &gt; 1;
+
+-- 02 量化统计连接后仍缺少说明的行情行数
+SELECT COUNT(*) AS unmatched_rows
+FROM prices AS p
+LEFT JOIN securities AS s ON p.symbol = s.symbol
+WHERE s.symbol IS NULL;</code></pre>
+  <p class="code-explain"><strong>逐行理解：</strong>01 每个代码计数并挑出重复者；若已建立正确主键，重复写入会先被拒绝，这仍是检查外部说明表的好习惯。02 用右表主键是否为空判断是否匹配，返回的是“行情行数”，不是“缺失证券数量”。如要数证券，把 SELECT 改为 <code>COUNT(DISTINCT p.symbol)</code>。历史行业还涉及生效日期；用今天的行业表解释过去，仅适合作为当前描述，不等于当时已知的分类。连接语义可查阅 <a href="https://www.sqlite.org/lang_select.html" target="_blank" rel="noopener">SQLite SELECT 文档</a>。</p>
+
+  <h3>9.5 LAG：在每只股票内部拿到上一条记录</h3>
+  <p>普通分组把许多行压成一行，而窗口函数保留原来的每一行，同时让这一行“看见”同一分组内的其他记录。<code>LAG(close)</code> 在有序窗口里取上一条收盘价；它相当于前面 pandas 中分组后的 <code>shift(1)</code>。</p>
+  <pre><code class="language-sql">-- 01 CTE 是有名字的中间查询，先把上一条价格算出来
+WITH lagged AS (
+    SELECT symbol, trade_date, close,
+           LAG(close) OVER (
+               PARTITION BY symbol ORDER BY trade_date
+           ) AS prev_close
+    FROM prices
+)
+-- 02 在外层使用中间结果，明确处理第一条和零分母
+SELECT symbol, trade_date, close, prev_close,
+       CASE WHEN prev_close &gt; 0
+            THEN 1.0 * close / prev_close - 1.0
+            ELSE NULL END AS price_return
+FROM lagged
+-- 03 日期筛选放在窗口计算之后，保留区间第一天的历史参照
+WHERE trade_date BETWEEN '2024-01-01' AND '2024-02-29'
+ORDER BY symbol, trade_date;</code></pre>
+  <ol class="line-notes"><li><strong>01：</strong><code>WITH lagged AS (...)</code> 给中间查询命名。<code>PARTITION BY symbol</code> 为每只股票分开计算，<code>ORDER BY trade_date</code> 指定过去到现在的顺序；两者少一个，结果就可能错。</li><li><strong>02：</strong>当某只股票没有更早记录时，上一价为 NULL，收益也应为 NULL。<code>1.0 *</code> 明确启用浮点运算，避免某些整型输入的除法截断；<code>CASE</code> 防御零或异常分母。主表已有正价格约束，但公式本身仍清楚表达有效条件。</li><li><strong>03：</strong>先计算历史上的上一价，再选择展示区间。如果先把日期截断，再算 LAG，区间第一条会丢失原本存在的上一价。股票筛选可提前做，因为分组相互独立；日期边界则需要根据所需历史长度谨慎处理。</li></ol>
+  <aside class="callout warning"><strong>上一条记录不自动等于上一个交易日。</strong>如果某天缺行情、停牌或被隔离，LAG 会跳到更早的有效记录。此时算出的是相邻有效观测间的价格变化，不应未经核验就标成严格“单日收益”。需要连接交易日历、确认停牌状态，并给间隔异常加标记；不能把缺失值随意补上来凑齐天数。</aside>
+  <p>公式是 <code>price_return = close / prev_close − 1</code>。它没有把分红再投资、滑点、佣金或不能成交的情况放进去。因此 pandas 与 SQL 算得一致，证明的是两套实现的一致性，并不能独立证明价格口径或交易假设正确。</p>
+
+  <h3>9.6 ROW_NUMBER：准确找出每只股票的最后一行</h3>
+  <p>想取“每只股票最新日期的收盘价”，不能写 <code>MAX(trade_date), MAX(close)</code>：最高价可能出现在另一日。我们要找的是<strong>一整行</strong>，而不是两个分别求出的最大值。</p>
+  <pre><code class="language-sql">-- 01 在每个股票分组内，按日期倒序编号
+WITH ranked AS (
+    SELECT symbol, trade_date, close,
+           ROW_NUMBER() OVER (
+               PARTITION BY symbol ORDER BY trade_date DESC
+           ) AS rn
+    FROM prices
+)
+-- 02 外层挑出每组编号为 1 的那一整行
+SELECT symbol, trade_date, close
+FROM ranked
+WHERE rn = 1
+ORDER BY symbol;</code></pre>
+  <p class="code-explain"><strong>逐行理解：</strong>01 的倒序让最新日期排在第一，<code>ROW_NUMBER</code> 依次赋值 1、2、3；复合主键确保同一股票日期不重复，所以排序有明确结果。02 在外层筛选编号，输出的日期与收盘价来自同一条记录。窗口函数不能直接放在 WHERE 中筛选，因此本课统一采用 CTE 再外层筛选；这也让查询更容易检查。若真实表包含多个修订版本，必须先定义取哪一版，或给排序补充稳定且有业务意义的版本键。参见 <a href="https://www.sqlite.org/windowfunctions.html" target="_blank" rel="noopener">SQLite 窗口函数文档</a>。</p>
+  <p>到这里，Python 与 SQL 的关系就清楚了：Python 便于组织采集、清洗、文件与图表；pandas 便于对内存中的表操作；SQL 便于从保存下来的表里筛选、连接与计算。选择工具时先写明研究问题、表粒度、时间范围和价格口径，再决定如何实现。</p>
+</section>
+
+
+<section id="lab" class="chapter"><div class="section-kicker">10 / End-to-end lab</div><h2>端到端实操：从脏行情到研究数据库</h2><p class="intro">现在把分散的操作连起来。完整脚本 <a href="lab.py" download>lab.py</a> 使用确定性模拟数据，不请求网络，也不读取你的真实投资文件。它既是可运行作业，也是一个可以逐步拆解的参考实现。</p><p>脚本生成两个虚构股票 SIM001 与 SIM002 的价格，使用 pandas 工作日序列提供日期；这<strong>不是 A 股交易日历</strong>，没有建模中国节假日与真实交易制度。原始数据刻意含乱序、完全重复、冲突重复、非法价格、负成交量、关键值缺失等问题；SIM003 只存在于证券资料表，用来观察 LEFT JOIN 的未匹配行。</p>
+<pre data-label="Windows / 仓库根目录"><code class="language-shell">.venv\Scripts\python extras/lecture-02/lab.py --help
+.venv\Scripts\python extras/lecture-02/lab.py --output work/lecture-02-run</code></pre>
+<div class="explain"><p>第一行查看参数；第二行执行完整流程。macOS / Linux 使用 <code>.venv/bin/python</code>。输出位置由你指定，建议用专门的实验目录。脚本仅管理带有本实验标记的输出，避免把不相关目录当作可覆盖的结果目录。</p></div><h3>如何读一份流水线脚本？</h3><ol><li><strong>入口与参数：</strong>先看 <code>main()</code>，理解输入、输出和运行顺序，不必一开始理解每个语法。</li><li><strong>生成与原始层：</strong>确认股票名为模拟标识、数值可重复生成，原始行保留可追踪的编号。</li><li><strong>清洗层：</strong>检查每条规则怎样隔离记录；特别关注同股同日数值冲突的两行都被保留为证据。</li><li><strong>特征层：</strong>检查排序、groupby、shift、rolling，以及边界缺失如何产生。</li><li><strong>数据库层：</strong>查看约束、参数化批量插入和查询；观察 LEFT JOIN 是否保留没有行情的证券。</li><li><strong>验收层：</strong>检查行数对账、主键唯一、pandas/SQL 数值一致和未来数据扰动验证。</li></ol><h3>不要只看“运行成功”四个字</h3><p>打开输出目录中的质量报告，逐项查看原始行数、清洗行数、隔离原因、每股覆盖和校验结果。原始层与隔离表之间应该能追溯；从特征表任选一只股票的第6条观测，手工验算上一价格、观测间收益与MA5，再用 SQL 查询同一记录。</p><aside class="callout"><strong>为什么不在网页上自动运行真实行情代码？</strong><p>阅读页面保持离线可用，Python / SQL 在自己的课程环境执行。这样能保存你的真实输出、完整错误与数据快照，便于复现；网页图表只承担概念演示，不伪装成已执行的金融研究。</p></aside><h3>可复现不是“在我电脑上运行一次”</h3><p>同一套代码、参数和固定输入应产生相同的数据结果。再次运行要检查主键行数没有翻倍，关键 CSV 与数据库逻辑结果一致。联网输入会变化，必须保存快照才能复现；只记录下载网址不够。完整脚本中的模拟数据与真实快照目录应始终分开命名。</p><details><summary>从实验扩展到自己的真实股票研究</summary><p>先替换“数据输入层”，不要同时重写所有计算。保留真实原始文件和 manifest，完成字段映射与单位转换后，使用相同的主键、类型和 OHLC检查。再加入真实交易日历、证券上市/退市/停牌状态、公司行为与价格调整口径。每次只扩展一项，并重跑质量验收。真实表可能包含合理但本练习未覆盖的特殊情况，应更新数据契约而非硬套规则。</p></details></section>
+<section id="quality" class="chapter"><div class="section-kicker">11 / Quality gate</div><h2>交付前，用证据回答“可以用于研究吗？”</h2><p>质量检查不只是计算“缺失率”。一份表完全没有空值，仍然可能混了价格口径、重复入库、错了日期或提前使用未来信息。把检查写成可重复执行的规则，并同时解释边界。</p><div class="table-wrap"><table class="wide"><thead><tr><th>检查</th><th>通过标准</th><th>失败后的动作</th></tr></thead><tbody><tr><td>结构与粒度</td><td>字段齐全；一行定义明确；symbol/date/口径一致。</td><td>停止特征计算，核对采集与映射。</td></tr><tr><td>行数对账</td><td>原始行 = 保留行 + 隔离行；若多规则重叠须区分主原因与多标签计数。</td><td>追查无记录丢行、重复归因或错误合并。</td></tr><tr><td>主键与排序</td><td>清洗表主键唯一，每股时间有序。</td><td>检查精确重复、修订冲突及排序字段。</td></tr><tr><td>数值与业务关系</td><td>原始价有限且为正，OHLC关系成立，量额非负，单位一致。</td><td>隔离错误；异常事件另行复核。</td></tr><tr><td>覆盖与状态</td><td>已解释缺口，区分非交易日、停牌、未上市与漏采。</td><td>补充日历与历史证券状态，不能凭空填行情。</td></tr><tr><td>特征边界</td><td>各股首个前值为空；MA5前4条为空；20期动量前20条为空。</td><td>排查跨股、填充和min_periods设置。</td></tr><tr><td>时间可用性</td><td>未来行情改变，不影响过去已完成的特征。</td><td>排查中心窗口、负shift或反向填充。</td></tr><tr><td>交叉与重跑</td><td>pandas与SQL在相同定义下数值一致；再次运行不增加重复行。</td><td>检查除法类型、NULL边界、主键及写入方式。</td></tr></tbody></table></div>
+<pre data-label="承接已计算特征的 clean / 最小断言"><code class="language-python">key = [&quot;symbol&quot;, &quot;trade_date&quot;]
+assert not clean.duplicated(key).any(), &quot;主键重复&quot;
+assert clean[key].notna().all().all(), &quot;键包含缺失&quot;
+assert clean.groupby(&quot;symbol&quot;)[&quot;trade_date&quot;].apply(
+    lambda s: s.is_monotonic_increasing).all(), &quot;日期未排序&quot;
+first = clean.groupby(&quot;symbol&quot;).head(1)
+assert first[&quot;prev_close&quot;].isna().all(), &quot;疑似跨股票滞后&quot;
+assert clean.groupby(&quot;symbol&quot;)[&quot;ma5&quot;].apply(
+    lambda s: s.iloc[:4].isna().all()).all(), &quot;均线边界异常&quot;</code></pre>
+<div class="explain"><p><code>assert</code> 在条件为假时立即停止并显示信息，适合课堂与研究检查。<code>.all().all()</code> 先对列再对全表确认条件。<code>head(1)</code> 对每组取第一行，特别适合捕捉跨股票 shift。生产流程可用显式异常替代断言，因为 Python 的优化模式可以关闭 assert。完整实操会运行更完整的验证。</p></div><h3>再问三个研究问题</h3><ul class="checklist"><li><strong>可用性：</strong>这条数据在信号产生时已经公开了吗？最终收盘数据是否被提前使用？</li><li><strong>代表性：</strong>退市、停牌和历史股票池怎样处理？排除规则会不会只留下表现好的样本？</li><li><strong>可比性：</strong>股票间币种、单位、频率和复权口径相同吗？报告里的“日收益”真的是相邻交易日吗？</li></ul><p>通过这些检查，只表示数据符合当前课程的数据契约；不意味着已经完成可交易策略。因子检验、样本外验证、手续费、可成交性和风险控制，是后续研究环节。</p></section>
+<section id="practice" class="chapter">
+  <div class="section-kicker">12 / PRACTICE &amp; REVIEW</div>
+  <h2>练习、答案与课后研究任务</h2>
+  <p class="lead">先自己写，再展开答案。评分关注数据含义和证据，不能只看程序是否跑完。以下练习全部基于本讲模拟数据，不对应任何真实 A 股收益表现。</p>
+
+  <h3>练习 1：识别主键、字段与价格口径</h3>
+  <p>一个文件有 100 只股票、各 30 天行情。请回答：合理的表粒度和主键是什么？证券代码为什么不用整数？某只股票第一条收益为什么应为空？原始价跨除权日的价格变化能直接解释为投资亏损吗？</p>
+  <p><strong>提示：</strong>将“记录如何唯一”和“收益是否有足够信息”分开思考。</p>
+  <details><summary>展开参考答案与评分标准</summary><p>每行是股票×日期×既定价格口径；本课同口径内用 <code>(symbol, trade_date)</code> 唯一定位。代码用文本保留前导零，且代码是标识而非可计算数量。首条记录没有前期价格，无法据此计算收益，应保留缺失标记。跨除权日原始报价含公司行为造成的机械变化，不能直接等同于投资者总回报；需明确复权或总收益处理方法。</p><p><strong>评分 10 分：</strong>粒度与主键 3 分，代码类型 2 分，首条收益 2 分，公司行为与口径 3 分。把首条收益填成“真实的 0%”不满足要求。</p></details>
+
+  <h3>练习 2：用 SQL 做一个不会漏行的证券说明连接</h3>
+  <p>输出所有行情的股票代码、日期、收盘价和名称。没有名称的行情仍要保留，并额外列出缺少说明的代码。要求证明连接没有把行情行数放大。</p>
+  <p><strong>提示：</strong>左表选行情；用右表唯一键判断匹配；比较连接前后的行数。</p>
+  <details><summary>展开可运行答案与检查方法</summary>
+  <pre><code class="language-sql">-- 01 保留全部行情；缺少说明的 name 为 NULL
+SELECT p.symbol, p.trade_date, p.close, s.name
+FROM prices AS p
+LEFT JOIN securities AS s ON p.symbol = s.symbol
+ORDER BY p.symbol, p.trade_date;
+
+-- 02 去重后报告缺少说明的证券代码
+SELECT DISTINCT p.symbol
+FROM prices AS p
+LEFT JOIN securities AS s ON p.symbol = s.symbol
+WHERE s.symbol IS NULL
+ORDER BY p.symbol;
+
+-- 03 这两个数字应相等，前提是右表代码唯一
+SELECT (SELECT COUNT(*) FROM prices) AS before_rows,
+       (SELECT COUNT(*) FROM prices AS p
+        LEFT JOIN securities AS s ON p.symbol = s.symbol) AS after_rows;</code></pre>
+  <p><strong>逐行解释：</strong>01 输出全部行情，右表缺值不会删左表行；02 只挑出未匹配的证券，并用 DISTINCT 让每个代码出现一次；03 用两个子查询在同一行展示连接前后行数。还要运行本章的右表重复键检查，因为“当前计数碰巧相同”不是永远正确的保证。</p><p><strong>预期性质：</strong>连接前后行数相同，所有原始主键仍存在，缺少说明时显示 NULL；具体缺失代码以本次模拟数据实际输出为准。<strong>评分 10 分：</strong>LEFT JOIN 3 分，保留缺失行 2 分，缺失代码查询 2 分，验证行数和唯一键 3 分。</p>
+  </details>
+
+  <h3>练习 3：找出每只股票最新行情，并解释一个错误答案</h3>
+  <p>写出每只股票最新日期、当日收盘价。说明为什么 <code>SELECT symbol, MAX(trade_date), MAX(close) FROM prices GROUP BY symbol</code> 不是正确答案。</p>
+  <details><summary>展开答案与预期性质</summary><p>参考本章 <code>ROW_NUMBER</code> 的完整查询，按代码分组、日期倒序编号，再在外层保留 <code>rn = 1</code>。两个 MAX 是独立聚合，最大日期与最大收盘价可能属于两条不同记录；查询结果拼出来的一行未必在原表出现过。</p><p><strong>预期性质：</strong>结果行数等于有行情的证券数量，每个代码只出现一次，每个输出的代码、日期、价格组合能回到原表找到。<strong>评分 10 分：</strong>正确窗口分组 3 分，日期倒序与外层筛选 3 分，解释错误原因 2 分，给出验证方法 2 分。</p></details>
+
+  <h3>练习 4：检查相邻观测收益，而不是被漂亮小数说服</h3>
+  <p>运行 LAG 查询，用 pandas 的分组 shift 独立计算对应收益。比较时先按代码和日期对齐，再处理缺失值。请说明：为什么不应该先把整张表的首尾行删掉，再比较两个数组？为什么一只股票出现日期缺口时，不能直接把跨缺口变化叫作单日收益？</p>
+  <details><summary>展开参考思路与评分标准</summary><p>应按 <code>(symbol, trade_date)</code> 一对一连接两套结果，检查键集合相同，再检查两侧缺失位置一致，并对有效值使用浮点容差。整表删一行只删掉全局第一条，无法正确处理每只股票各自的首条；按位置比较还可能让不同代码或日期碰到一起。跨缺口收益覆盖多个观测间隔，需要交易日历与状态证据来确认间隔含义。</p><p><strong>预期性质：</strong>每只股票第一条没有上一价；不存在跨股票取值；两套结果的有效值在约定容差内一致。<strong>评分 10 分：</strong>键对齐 3 分，缺失位置 2 分，浮点比较 2 分，时间间隔解释 3 分。仅展示“数值看起来差不多”不能得满分。</p></details>
+
+  <h3>课后任务：交付一份能被同学复现的数据工程包</h3>
+  <p>先完整跑通离线实操，再选一只真实 A 股做小范围采集练习。真实数据任务不要求得到某个预设收益结果；如果数据源暂不可用，提交错误记录与离线结果也能展示你是否掌握流程。禁止把模拟数值换上真实股票名称后当作真实行情。</p>
+  <ol><li><strong>研究说明：</strong>写明证券范围、日期范围、原始价或复权价、数据源、采集时间、字段单位与接口版本。说明为什么选择该口径，以及它不能支持哪些推断。</li><li><strong>原始层：</strong>保存原始响应或原始 CSV，不用清洗结果覆盖原件。记录文件哈希或其他稳定标识，使别人能确认输入是否相同。</li><li><strong>清洗层：</strong>输出排序后的行情、被隔离的记录与逐条原因。分别报告完全重复、冲突重复、日期/数值缺失、非法 OHLC、负成交量等数量，解释每类采用的政策。</li><li><strong>研究层：</strong>用 groupby、shift、rolling 计算相邻观测价格收益及 5/20 条有效观测均线；明确每项需要多少历史、何时可知。不要把不足窗口的数据强行填成有效因子。</li><li><strong>数据库层：</strong>保留建表结构；给出基础筛选、分组聚合、LEFT JOIN、LAG 与 ROW_NUMBER 查询，以及 Python 与 SQL 一致性的检查结果。</li><li><strong>复现说明：</strong>给出从空目录开始的运行方式、依赖版本、输出目录与预期性质。请同学用同一份输入重跑，再比较记录数、隔离原因与关键统计。</li></ol>
+  <div class="table-wrap"><table><thead><tr><th>验收项</th><th>合格证据</th><th>分值</th></tr></thead><tbody><tr><td>来源与口径</td><td>真实/模拟清晰分开，时间、单位和价格口径可追溯</td><td>20</td></tr><tr><td>清洗决策</td><td>原始层保留，冲突不静默覆盖，隔离原因完整</td><td>25</td></tr><tr><td>时间与计算</td><td>分股票排序、窗口有效、没有未来信息进入特征</td><td>20</td></tr><tr><td>数据库与查询</td><td>唯一键有效，连接不扩张，窗口查询语义正确</td><td>20</td></tr><tr><td>可复现性</td><td>同一输入可重跑；结果一致，失败情况有记录</td><td>15</td></tr></tbody></table></div>
+  <aside class="callout"><strong>完成后的自检。</strong>另一位同学能否只根据你的文件回答：这是什么数据？一行代表什么？缺了什么？删除了什么、为什么？公式看到的历史到哪里为止？数据库中的结果能否回到原始文件核对？如果仍需靠口头补充，交付还不够完整。</aside>
+
+  <h3>本讲总结：可靠的数据，才有可检验的因子</h3>
+  <p>这节课的终点不是下载成功，也不是写出一条 SQL。你已经把金融语义、程序操作和研究证据连在一起：先定义字段与口径，再保留原始输入；通过清洗和隔离建立可解释的数据层；按股票、时间计算特征；用主键与约束保存；通过独立查询交叉检查。</p>
+  <p>进入下一讲因子研究前，请带走三句话：<strong>每张表都要说清楚一行是什么；每个收益都要说清楚价格与时间口径；每次修复都要留下可以追溯的证据。</strong>均线和收益计算即使完全正确，也仍需要在后续研究里接受样本外检验、交易约束和成本检验。</p>
+</section>
+
+<section id="references" class="chapter"><div class="section-kicker">13 / Reference desk</div><h2>资料与继续学习</h2><p>本讲依据原有第二讲主题“Python、pandas与SQL金融数据工程”展开，按完整阅读教程组织。下列为接口语义、函数行为与真实事件的主要依据；文档可能更新，运行时请以实际安装版本及数据契约为准。资料核查日期：2026年11月8日。</p><ol class="sources"><li><a href="https://akshare.akfamily.xyz/data/stock/stock_quote.html" target="_blank" rel="noopener">AkShare 股票行情文档</a>：搜索 stock_zh_a_hist；字段、单位、参数及复权注意事项。</li><li><a href="https://pandas.pydata.org/docs/user_guide/groupby.html" target="_blank" rel="noopener">pandas GroupBy 用户指南</a>：分组、聚合与 transform。</li><li><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.api.typing.SeriesGroupBy.shift.html" target="_blank" rel="noopener">pandas SeriesGroupBy.shift</a> 与 <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.api.typing.SeriesGroupBy.rolling.html" target="_blank" rel="noopener">SeriesGroupBy.rolling</a>：移动与窗口语义。</li><li><a href="https://www.sqlite.org/lang_select.html" target="_blank" rel="noopener">SQLite SELECT</a>、<a href="https://www.sqlite.org/windowfunctions.html" target="_blank" rel="noopener">窗口函数</a> 与 <a href="https://www.sqlite.org/lang_createtable.html" target="_blank" rel="noopener">CREATE TABLE</a>：连接、聚合、窗口和约束。</li><li><a href="https://docs.python.org/3/library/sqlite3.html" target="_blank" rel="noopener">Python sqlite3 官方文档</a>：连接、事务、参数绑定。</li><li><a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0619/2025061901148_c.pdf" target="_blank" rel="noopener">中国平安2024年年度权益分派实施公告</a>：真实A股事件，公告编号临2025-026；本页未提供或推断实际行情。</li></ol><div class="grid2"><a class="card" href="../lecture-01/index.html">← 回顾番外期第一讲<br><strong>量化投资入门与完整研究流程</strong></a><a class="card" href="../../README.md">返回仓库课程目录 →<br><strong>第一期、第二期与番外期</strong></a></div><p class="small">本课程用于学习与研究。离线数据不对应真实证券；任何演示指标都不构成投资建议。</p></section></main></div><button class="to-top" type="button" aria-label="返回页面顶部">↑ 顶部</button><footer><div><span>QUANT FOR BABIES / 让研究有据可查</span><span>番外期 · 第二讲 · 长篇在线教程 · <a href="https://github.com/ThreshoLdnnis/Quant-for-babies">GitHub 仓库</a></span></div></footer></body></html>
