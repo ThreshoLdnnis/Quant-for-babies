@@ -1,4 +1,4 @@
-# Notebook 模板（建议单元结构）
+# Notebook 模板
 
 你可以按以下顺序组织每个 `.ipynb`：
 
