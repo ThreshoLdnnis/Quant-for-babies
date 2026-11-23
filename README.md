@@ -1,217 +1,218 @@
 <p align="center">
-  <img src="assets/images/readme-cover.jpg" alt="Quant for babies 量化小白入门课程封面" width="100%" />
-</p>
-<p align="center">
-  <img src="assets/images/IMG_2267.jpg" alt="logo" width="100%" />
-</p>
-
-# 零基础学习量化金融
-
-<p align="center">
-  <strong>Quant-for-babies</strong> · 中文零基础量化金融 Notebook 路线 · 第一期、第二期与番外期课件已上线
+  <img src="assets/images/readme-guide.svg" alt="Quant for babies — 理解概念，运行实验，解释结果" width="960" />
 </p>
 
 <p align="center">
-  <a href="requirements.txt"><img src="https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python"/></a>
-  <a href="notebooks/"><img src="https://img.shields.io/badge/Jupyter-Notebook-F37626?style=flat-square&logo=jupyter&logoColor=white" alt="Jupyter"/></a>
-  <a href="notebooks/phase1_intro/"><img src="https://img.shields.io/badge/Phase_1-4_chapters-2ea043?style=flat-square" alt="Phase 1"/></a>
-  <a href="notebooks/phase2_intro/"><img src="https://img.shields.io/badge/Phase_2-4_chapters-1f6feb?style=flat-square" alt="Phase 2"/></a>
+  <strong>简体中文</strong> · <a href="docs/i18n/README.zh-TW.md">繁體中文</a> · <a href="docs/i18n/README.en.md">English</a> · <a href="docs/i18n/README.ru.md">Русский</a> · <a href="docs/i18n/README.ja.md">日本語</a> · <a href="docs/i18n/README.ko.md">한국어</a> · <a href="docs/i18n/README.fr.md">Français</a> · <a href="docs/i18n/README.de.md">Deutsch</a> · <a href="docs/i18n/README.es.md">Español</a> · <a href="docs/i18n/README.hi.md">हिन्दी</a>
 </p>
+
+# 从第一个实验，走进量化金融
+
+从一份行情数据出发，逐步理解交易信号、风险、组合与可复现研究。用 **8 个 Jupyter Notebook、5 讲研究专题、7 个浏览器交互演示**，把概念变成可以运行、观察和解释的结果。
+
+**语言说明：**本指南与导航提供十种语言版本。Notebook、专题课和多数配套文档目前主要使用**简体中文**；切换 README 语言不会翻译课程正文。
 
 <p align="center">
-  <a href="#快速开始">快速开始</a> ·
-  <a href="#课程目录">课程目录</a> ·
-  <a href="#番外期--第二期课前培训">番外期</a> ·
-  <a href="#学习路线">学习路线</a> ·
-  <a href="#后续规划">后续规划</a>
+  <a href="#start">从这里开始</a> · <a href="#setup">环境准备</a> · <a href="#curriculum">Notebook 课程</a> · <a href="#labs">研究实操</a> · <a href="#demos">交互演示</a> · <a href="#faq">常见问题</a>
 </p>
 
----
+| 当前内容 | 形式 | 你可以完成什么 |
+| --- | --- | --- |
+| 第 01–08 章 · 已提供 | Jupyter Notebook | 分析行情、构建均线规则、度量风险、比较组合 |
+| 第 01–05 讲 · 已提供 | 离线 HTML + 四套 Python 实操 | 走通数据 → 因子 → 检验 → 模拟回测 |
+| 七个交互演示 · 已提供 | 独立 HTML | 不安装研究环境，也能直观理解公式 |
+| 后续章节与进阶项目 · 规划中 | [详细路线图](docs/ROADMAP.md) | 查看后续方向，区分规划与已有内容 |
 
-## 简介
+<a id="start"></a>
+## 1. 先选一个适合你的入口
 
-这是一份面向**零基础**读者的中文量化金融教程：每章配有可运行的 Notebook 和配套交互演示，边读边跑，把概念落到真实行情上。本课程侧重可运行的代码与清晰图示，而非堆砌公式。内容持续更新，欢迎 Star 方便日后查阅。
+| 你的目标 | 从哪里开始 | 第一个成果 |
+| --- | --- | --- |
+| 先理解概念，再考虑编程 | [第一讲](extras/lecture-01/index.html)与[交互演示](#demos) | 能讲清量化研究的基本流程 |
+| 边写 Python 边学习 | [配置环境](#setup)，再打开[第 01 章](notebooks/phase1_intro/01_什么是量化金融.ipynb) | 读取行情并画出第一张价格图 |
+| 练习完整研究流程 | 按顺序学习[第 02–05 讲](#labs) | 得到数据检查、因子表、评价报告和模拟交易账本 |
+| 带团队学习或组织工作坊 | [第一讲逐页讲者备注](extras/lecture-01/lecture-notes.md)与各讲实操说明 | 组织有练习、有可核验成果的学习活动 |
 
-| 项目 | 说明 |
-|------|------|
-| 形式 | Jupyter Notebook + 配套交互 HTML + 番外期长篇在线教程 |
-| 数据 | `yfinance` · `akshare` 免费日线行情 |
-| 第一期 | 4 章 |
-| 第二期 | 4 章|
-| 番外期 | 五讲系列：量化研究流程 → 数据工程 → 因子构建 → 有效性检验 → 多因子策略、回测与实证研究 |
-| 不适合 | 已具备完整回测框架、仅需高级因子参考的读者 |
+不要求量化金融基础。运行 Notebook 时，了解基本 Python 语法会更顺利；也可以先从 HTML 课件读起。每次按 **阅读 → 运行 → 改一个假设 → 解释结果** 的顺序学习。
 
----
+### 怎样打开 HTML 课件？
 
-## 快速开始
+**GitHub 的 HTML 文件页展示源码，点击仓库链接不会直接运行课件。** 通过 **Code → Download ZIP** 下载仓库并解压，在浏览器中打开 `extras/lecture-0N/index.html`。五讲课件和七个演示均可本地离线阅读；外部参考链接与实时数据下载仍需联网。
+
+也可以在仓库根目录运行：
+
+```bash
+python -m http.server 8000 --bind 127.0.0.1
+```
+
+浏览器访问 `http://127.0.0.1:8000/extras/lecture-01/`，把 `01` 换成 `02`–`05` 即可打开其他课件。macOS/Linux 若没有 `python` 命令，请使用 `python3`。按 `Ctrl+C` 停止服务。
+
+第一讲快捷键：方向键或空格翻页，`N` 查看讲者备注，`O` 打开总览，`F` 进入全屏。
+
+<a id="setup"></a>
+## 2. 配好 Notebook 学习环境
+
+使用 **Python 3.10+**，可优先选择 Python 3.12。克隆需要安装 Git；也可以下载 ZIP 后解压。以下命令在终端运行，直接使用虚拟环境的解释器路径，避免激活脚本带来的问题。
+
+<details>
+<summary><strong>Windows · PowerShell</strong></summary>
+
+```powershell
+git clone https://github.com/ThreshoLdnnis/Quant-for-babies.git
+cd Quant-for-babies
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m jupyterlab
+```
+
+如果使用 ZIP，请在解压后的仓库文件夹中打开 PowerShell，从 `python -m venv .venv` 开始。
+
+</details>
+
+<details>
+<summary><strong>macOS / Linux · 终端</strong></summary>
 
 ```bash
 git clone https://github.com/ThreshoLdnnis/Quant-for-babies.git
 cd Quant-for-babies
-pip install -r requirements.txt
-jupyter lab
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m jupyterlab
 ```
 
----
+如果使用 ZIP，请在解压后的仓库文件夹中打开终端，从 `python3 -m venv .venv` 开始。
 
-## 课程目录
+</details>
 
-### 第一期 · 量化入门
+Jupyter 启动后会在终端显示本地网址。在浏览器打开它，选择 `notebooks/phase1_intro/01_什么是量化金融.ipynb`，用 `Shift+Enter` 从上到下执行单元格。确认 Notebook 使用的是刚创建的环境。
 
-| 章 | 主题 | Notebook | 你将完成 |
-|:--:|------|----------|----------|
-| 01 | 什么是量化金融 | [打开](notebooks/phase1_intro/01_什么是量化金融.ipynb) | 建立量化直觉；下载真实 AAPL 行情 |
-| 02 | 你的第一个量化实验 | [打开](notebooks/phase1_intro/02_你的第一个量化实验.ipynb) | OHLCV、收益率、波动对比 |
-| 03 | 移动平均线策略 | [打开](notebooks/phase1_intro/03_移动平均线策略.ipynb) | MA5/MA20、金叉/死叉、首个交易规则 |
-| 04 | 策略回测 | [打开](notebooks/phase1_intro/04_策略回测.ipynb) | 模拟交易、净值曲线、胜率与回撤 |
+| 依赖分组 | 用途 | 安装入口 |
+| --- | --- | --- |
+| Jupyter、NumPy、pandas、Matplotlib、seaborn | 运行 Notebook、处理表格和绘图 | [根目录 requirements](requirements.txt) |
+| yfinance、AkShare | 行情示例；下载数据需要联网 | 根目录 requirements |
+| scikit-learn | 学习环境中的机器学习工具 | 根目录 requirements；后续 AI 章节仍在规划中 |
+| 各讲独立依赖 | 离线研究实验；第四讲还需 SciPy | 各讲文件夹的 `requirements.txt` |
+| 可选绘图依赖 | 导出研究图表 | 第 03–05 讲的 `requirements-plot.txt` |
 
-### 第二期 · 风险与组合
+<a id="curriculum"></a>
+## 3. 按顺序完成八章 Notebook
 
-| 章 | 主题 | Notebook | 你将完成 |
-|:--:|------|----------|----------|
-| 05 | 理解波动率 | [打开](notebooks/phase2_intro/01_理解波动率.ipynb) | 波动率度量、年化换算、多票对比 |
-| 06 | 夏普比率与 Beta | [打开](notebooks/phase2_intro/02_夏普比率与Beta.ipynb) | 风险调整收益、个股相对大盘敏感度 |
-| 07 | 最大回撤与仓位管理 | [打开](notebooks/phase2_intro/03_最大回撤与仓位管理.ipynb) | 回撤测算、仓位与风险承受 |
-| 08 | 多标的组合与相关性 | [打开](notebooks/phase2_intro/04_多标的组合与相关性.ipynb) | 等权组合、相关性矩阵、分散化 |
+各期内部按顺序学习。每章留下三样东西：**一张结果图、一个改过的参数、一段自己的解释**。
 
-### 番外期 · 第二期课前培训
+| 章节 | 主题 / Notebook | 你将学会 |
+| :---: | --- | --- |
+| 01 | [什么是量化金融](notebooks/phase1_intro/01_什么是量化金融.ipynb) | 建立量化直觉，下载 AAPL 价格数据 |
+| 02 | [你的第一个量化实验](notebooks/phase1_intro/02_你的第一个量化实验.ipynb) | 认识 OHLCV、计算收益率、比较波动 |
+| 03 | [移动平均线策略](notebooks/phase1_intro/03_移动平均线策略.ipynb) | 将 MA5/MA20 交叉变成明确的交易规则 |
+| 04 | [策略回测](notebooks/phase1_intro/04_策略回测.ipynb) | 模拟交易，观察净值、胜率和回撤 |
+| 05 | [理解波动率](notebooks/phase2_intro/01_理解波动率.ipynb) | 度量与年化波动率，比较不同标的 |
+| 06 | [夏普比率与 Beta](notebooks/phase2_intro/02_夏普比率与Beta.ipynb) | 理解风险调整收益与市场敏感度 |
+| 07 | [最大回撤与仓位管理](notebooks/phase2_intro/03_最大回撤与仓位管理.ipynb) | 联系回撤、资金敞口与风险承受能力 |
+| 08 | [多标的组合与相关性](notebooks/phase2_intro/04_多标的组合与相关性.ipynb) | 构建等权组合，理解相关性与分散化 |
 
-| 讲 | 主题 | 课件 | 讲者材料 |
-|:--:|------|------|------|
-| 01 | 量化投资入门与完整研究流程 | [打开 13 页交互式 HTML 课件](extras/lecture-01/index.html) | [完整逐页讲者备注](extras/lecture-01/lecture-notes.md) |
-| 02 | Python、pandas与SQL金融数据工程 | [打开长篇 HTML 在线教程](extras/lecture-02/index.html) | [运行说明](extras/lecture-02/README.md) · [完整离线实操](extras/lecture-02/lab.py) |
-| 03 | 量化因子构建与特征预处理 | [打开单文件 HTML 教程](extras/lecture-03/index.html) | [运行说明](extras/lecture-03/README.md) · [因子实操](extras/lecture-03/factor_lab.py) · [绘图代码](extras/lecture-03/plot_factors.py) |
-| 04 | 因子有效性检验与基础统计 | [打开单文件 HTML 教程](extras/lecture-04/index.html) | [运行说明](extras/lecture-04/README.md) · [检验实操](extras/lecture-04/evaluation_lab.py) · [绘图代码](extras/lecture-04/plot_evaluation.py) |
-| 05 | 多因子策略、回测与实证研究 | [打开单文件 HTML 教程](extras/lecture-05/index.html) | [运行说明](extras/lecture-05/README.md) · [模拟回测](extras/lecture-05/backtest_lab.py) · [绘图代码](extras/lecture-05/plot_backtest.py) |
+**第一期 · 第 01–04 章：**行情 → 收益 → 规则 → 回测。<br />
+**第二期 · 第 05–08 章：**波动 → 风险调整指标 → 仓位 → 组合。
 
-第一讲课件可下载后直接在浏览器打开，无需安装依赖或联网。使用左右方向键、空格键或屏幕下方按钮翻页；按 N 查看完整讲者备注，O 打开总览，F 全屏投屏。所有图表数值均标注为模拟教学数据。
+<details>
+<summary>预览前四章的结果图</summary>
 
-第二讲采用完整、连续纵向阅读的知识库页面，包含章节锚点、阅读进度、字段字典、公式、模拟图表、代码复制、实操与折叠答案。只需下载 `extras/lecture-02/index.html` 即可离线阅读，样式与交互已内置；Python 实操需安装该讲依赖，AkShare 真实采集为联网选做。GitHub文件页显示源码，页面运行方式见[第二讲说明](extras/lecture-02/README.md)。
-
-第三讲沿用单文件纵向阅读形式，完整讲解20日动量、波动率和平均换手率，以及MAD、横截面Z-score、方向与相关性。附8只虚构股票的可复现实验、质量报告和PNG/SVG绘图工具；全部模拟数据明确标注。见[第三讲说明](extras/lecture-03/README.md)。
-
-第四讲沿用第三讲的相同模拟数据与固定因子方向，讲解Rank IC、ICIR、五分组、统计不确定性与时间顺序检验。附手算、精确课堂置换、共同样本审计、练习答案及PNG/SVG图表；如实报告短样本无法支持正式三段检验的边界。见[第四讲说明](extras/lecture-04/README.md)。
-
-第五讲完成静态三因子合成、Top N、月度信号与下一开盘执行、现金股数账本、成本、净值风险、公平对照及实证报告。附15套确定性模拟账户、交易阻断与估值审计、五类研究图、练习和答辩验收；所有结果为模拟，短样本不冒称样本外实证。见[第五讲说明](extras/lecture-05/README.md)。
-
-### 配套交互演示
-
-在浏览器本地打开（无需联网，对应各章公式推导）：
-
-| 演示 | 链接 | 对应章节 |
-|------|------|----------|
-| 布朗运动与随机游走 | [打开](assets/interactive/brownian-random-walk.html) | 第一期 · 第一章 |
-| 日收益率 | [打开](assets/interactive/daily-return-demo.html) | 第二期 · 理解波动率 |
-| 样本标准差 | [打开](assets/interactive/std-dev-demo.html) | 第二期 · 理解波动率 |
-| 总体方差 | [打开](assets/interactive/population-variance-demo.html) | 第二期 · 理解波动率 |
-| 方差修正公式 | [打开](assets/interactive/variance-formulas-demo.html) | 第二期 · 理解波动率 |
-| 夏普比率 | [打开](assets/interactive/sharpe-ratio-demo.html) | 第二期 · 夏普比率与 Beta |
-| Beta | [打开](assets/interactive/beta-demo.html) | 第二期 · 夏普比率与 Beta |
-
-更多说明见 [assets/interactive/README.md](assets/interactive/README.md)。
-
----
-
-## 章节预览
-
-<p align="center">
-  <img src="assets/images/ch01_real_stock.png" width="48%" alt="第一章"/>
-  <img src="assets/images/ch02_returns.png" width="48%" alt="第二章"/>
+<p>
+  <img src="assets/images/ch01_real_stock.png" alt="第一章：行情数据" width="46%" />
+  <img src="assets/images/ch02_returns.png" alt="第二章：收益率" width="46%" />
 </p>
-<p align="center">
-  <img src="assets/images/ch03_ma_signals.png" width="48%" alt="第三章"/>
-  <img src="assets/images/ch04_backtest.png" width="48%" alt="第四章"/>
+<p>
+  <img src="assets/images/ch03_ma_signals.png" alt="第三章：均线信号" width="46%" />
+  <img src="assets/images/ch04_backtest.png" alt="第四章：回测" width="46%" />
 </p>
 
-<p align="center"><sub>章节示意图见 <code>assets/images/</code>；本地运行 Notebook 可得到交互式图表</sub></p>
+</details>
 
----
+<a id="labs"></a>
+## 4. 用五讲专题串起研究流程
 
-## 学习路线
+专题课与 Notebook 相互补充，按顺序学习可以走通研究流程。**请保留完整仓库结构：**第四、第五讲的实验会导入第三讲代码。
 
-```
-Phase 1
-├── 01 量化认知与真实数据
-├── 02 收益率与数据分析
-├── 03 双均线策略
-└── 04 策略回测
+| 讲次 | 阅读材料 | 实操与预期成果 |
+| :---: | --- | --- |
+| 01 | [量化研究完整流程](extras/lecture-01/index.html) · [讲者备注](extras/lecture-01/lecture-notes.md) | 13 页入门幻灯片；本讲没有 Python 实验 |
+| 02 | [金融数据工程](extras/lecture-02/index.html) · [运行说明](extras/lecture-02/README.md) | pandas、SQLite/SQL、清洗与隔离 → CSV 表、数据库、质量报告 |
+| 03 | [因子构建与预处理](extras/lecture-03/index.html) · [运行说明](extras/lecture-03/README.md) | MOM20、VOL20、TURN20、MAD、横截面 Z-score → 因子表与诊断结果 |
+| 04 | [因子检验与基础统计](extras/lecture-04/index.html) · [运行说明](extras/lecture-04/README.md) | Rank IC、ICIR、分组、时间顺序评价 → 评价表与审计报告 |
+| 05 | [多因子策略与回测](extras/lecture-05/index.html) · [运行说明](extras/lecture-05/README.md) | 静态评分、Top N、下一开盘执行、成本 → 模拟账户、交易账本与研究汇总 |
 
-Phase 2
-├── 05 理解波动率
-├── 06 夏普比率与 Beta
-├── 07 最大回撤与仓位管理
-└── 08 多标的组合与相关性
+### 运行四套离线实操
 
-番外期
-├── 第一讲 量化投资入门与完整研究流程 · 13 页 HTML 培训课件
-├── 第二讲 Python、pandas与SQL金融数据工程 · 长篇 HTML 在线教程与离线实操
-├── 第三讲 量化因子构建与特征预处理 · 单文件 HTML、因子实验与分布图
-├── 第四讲 因子有效性检验与基础统计 · 单文件 HTML、评价实验与Worksheet
-└── 第五讲 多因子策略、回测与实证研究 · 单文件 HTML、交易账本与研究报告
+在仓库根目录、虚拟环境已激活时运行以下命令。也可以将所有 `python` 替换为 Windows 的 `.\.venv\Scripts\python.exe`，或 macOS/Linux 的 `.venv/bin/python`。
 
-Phase 3（规划ing）  因子 · 多因子选股
-Phase 4（规划ing）  机器学习与 AI 量化
-```
+```bash
+python -m pip install -r extras/lecture-02/requirements.txt
+python extras/lecture-02/lab.py --output work/lecture-02-run
 
-<p align="center">
-  <img src="assets/images/learning-levels-handdrawn.png" alt="章节进度称号：第1章 Lv.1 量化探索者；第2章 Lv.1 数据分析；第3章 Lv.2 策略设计师；第4章 Lv.3 回测分析师；第5章 Lv.4 风险观察员；第6章 Lv.4 风险分析师；第7章 Lv.5 仓位管理员；第8章 Lv.5 组合分析师" width="820" />
-</p>
+python -m pip install -r extras/lecture-03/requirements.txt
+python extras/lecture-03/factor_lab.py --output work/lecture-03-run
 
----
+python -m pip install -r extras/lecture-04/requirements.txt
+python extras/lecture-04/evaluation_lab.py --output work/lecture-04-run
 
-## 仓库结构
-
-```
-Quant-for-babies/
-├── notebooks/
-│   ├── phase1_intro/         # 第一期（第 1～4 章）
-│   └── phase2_intro/         # 第二期（第 5～8 章）
-├── assets/
-│   ├── images/               # README 与传播用配图
-│   └── interactive/          # 独立 HTML 交互演示
-├── extras/
-│   ├── lecture-01/           # 番外期第一讲：HTML 幻灯片与逐页讲者备注
-│   ├── lecture-02/           # 番外期第二讲：长篇 HTML 教程、Python 实操与采集脚本
-│   ├── lecture-03/           # 番外期第三讲：因子构建、预处理、练习与参考代码
-│   ├── lecture-04/           # 番外期第四讲：Rank IC、ICIR、统计与样本外评价
-│   └── lecture-05/           # 番外期第五讲：静态策略、模拟回测、实证研究与验收
-├── scripts/                  # 配图生成、Notebook 维护脚本
-├── docs/ROADMAP.md           # 详细路线图
-├── src/                      # 可复用模块（建设中）
-└── requirements.txt
+python -m pip install -r extras/lecture-05/requirements.txt
+python extras/lecture-05/backtest_lab.py --output work/lecture-05-run
 ```
 
+每讲使用独立的输出目录。脚本会保护不属于该实验的非空目录；更换或复用路径前，请先阅读该讲说明。可选绘图工具、AkShare 联网采集练习也在各讲文档中。
+
+**怎样理解实验结果：**核心实操使用确定性的**模拟教学数据**，安装依赖后无需行情连接。短样本和假设成本用于说明方法，不能据此认定策略可投资或已完成正式样本外验证。Notebook 的数据下载可能使用真实历史价格；部分交互演示内置历史快照，操作控件不会获取实时行情。
+
+<a id="demos"></a>
+## 5. 用交互演示理解公式
+
+下载后用浏览器打开 HTML，或使用前文的本地服务。[演示说明](assets/interactive/README.md)介绍了各页的数据与交互方式。
+
+| 演示 | 配合章节 | 建议观察 |
+| --- | --- | --- |
+| [布朗运动与随机游走](assets/interactive/brownian-random-walk.html) | 第 01 章 | 比较不同路径，区分随机性与预测 |
+| [日收益率](assets/interactive/daily-return-demo.html) | 第 05 章 | 跟着价格变化计算收益率 |
+| [样本标准差](assets/interactive/std-dev-demo.html) | 第 05 章 | 观察离差怎样汇总为波动 |
+| [总体方差](assets/interactive/population-variance-demo.html) | 第 05 章 | 将定义与图形对应起来 |
+| [方差修正公式](assets/interactive/variance-formulas-demo.html) | 第 05 章 | 比较 `n` 与 `n−1` 的作用 |
+| [夏普比率](assets/interactive/sharpe-ratio-demo.html) | 第 06 章 | 对照超额收益与波动率 |
+| [Beta](assets/interactive/beta-demo.html) | 第 06 章 | 观察标的与基准之间的关系 |
+
+<a id="roadmap"></a>
+## 6. 分清已有内容与后续规划
+
+| 状态 | 内容 | 入口 |
+| --- | --- | --- |
+| 已提供 | 八章 Notebook、五讲专题、七个演示 | 上方课程与实操表格 |
+| 规划中 · 第 09–14 章 | 机器学习入门、XGBoost、LSTM、Transformer、多因子选股、AI 量化系统 | [详细路线图](docs/ROADMAP.md) |
+| 规划中 · 进阶项目 | 金融 NLP/RAG 助手、市场状态动态配置、机器学习选股与可解释 Alpha | [项目规划](docs/ROADMAP.md#advanced-projects) |
+| 建设中 | `src/` 中的可复用模块 | 当前为占位目录，尚非生产级回测框架 |
+
+### 快速认识仓库目录
+
+| 路径 | 内容 |
+| --- | --- |
+| [`notebooks/`](notebooks/) | 第一期与第二期课程 |
+| [`extras/`](extras/) | 专题 HTML、说明、实操与可选绘图工具 |
+| [`assets/interactive/`](assets/interactive/) | 七个浏览器演示 |
+| [`assets/images/`](assets/images/) | 课程插图与 README 配图 |
+| [`docs/`](docs/) | 路线图与多语言 README |
+| [`scripts/`](scripts/) | Notebook 维护与配图生成工具 |
+| [`requirements.txt`](requirements.txt) | Notebook 环境依赖 |
+
+<a id="faq"></a>
+## 7. 遇到问题时
+
+| 问题 | 处理方法 |
+| --- | --- |
+| 点击 HTML 为什么只看到代码？ | 下载后打开文件，或按[入门说明](#start)启动本地 HTTP 服务。 |
+| Jupyter 提示缺少模块？ | 用同一个环境的 `python -m pip` 安装，检查所选内核，安装后重启内核。 |
+| 行情下载失败怎么办？ | 检查网络与数据源响应，不要把空数据视为成功实验；可先用离线专题实操继续学习。 |
+| 实验为什么拒绝输出目录？ | 选择新的独立目录，或按该讲要求复用实验自己带标记的输出目录。 |
+| 切换语言会翻译 Notebook 吗？ | 不会。目前提供十种语言的 README，课程正文仍主要是简体中文。 |
+| 怎样反馈错误？ | [提交 Issue](https://github.com/ThreshoLdnnis/Quant-for-babies/issues)，附文件路径、运行命令、Python 版本和报错信息；日志中请移除令牌与个人信息。 |
+
+欢迎贡献修正、更清楚的示例与经过核对的翻译。更新时请同步十种指南的路径和命令，参见[翻译维护说明](docs/i18n/README.md)。
+
 ---
 
-## 后续规划
-
-| 章节 | 主题 | 状态 |
-|------|------|------|
-| 09 | AI 预测涨跌（入门） | 规划中 |
-| 10 | XGBoost 量化策略 | 规划中 |
-| 11 | LSTM 时间序列 | 规划中 |
-| 12 | Transformer 交易 | 规划中 |
-| 13 | 多因子选股 | 规划中 |
-| 14 | AI 量化系统搭建 | 规划中 |
-
-完整说明见 [docs/ROADMAP.md](docs/ROADMAP.md)。
-
-### 番外系列后续规划
-
-| 期次 | 项目 | 状态 |
-|------|------|------|
-| 第三期 | **LLM-Based Financial Research Assistant \| Financial NLP and RAG Project**<br>基于大语言模型的金融研究助手 \| 金融NLP与RAG项目 | 规划中 |
-| 第四期 | **Market-Regime-Aware Dynamic Multi-Factor Allocation \| Quantitative Research**<br>适配市场机制的动态多因子配置 \| 量化研究 | 规划中 |
-| 第五期 | **Machine Learning-Based Equity Selection and Explainable Alpha Research**<br>基于机器学习的选股方法与可解释阿尔法研究 | 规划中 |
-
----
-
-## 免责声明
-
-本仓库仅供学习与研究，**不构成任何投资建议**。历史回测结果不代表未来表现，市场有风险。
-
----
-
-<p align="center">
-  <sub>如果这份路线对你有帮助，欢迎 Star ⭐</sub>
-</p>
+**许可：**[MIT](LICENSE)。**学习用途：**本仓库仅供学习与研究，不构成投资建议。历史或模拟结果不保证未来表现。

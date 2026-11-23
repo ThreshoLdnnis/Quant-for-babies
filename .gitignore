@@ -16,6 +16,8 @@ env/
 .idea/
 
 # Data artifacts
+work/
+qa/
 data/raw/*
 data/processed/*
 !data/raw/.gitkeep

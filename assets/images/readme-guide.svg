@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-labelledby="title desc">
+  <title id="title">Quant for babies</title>
+  <desc id="desc">Learn, experiment, explain. Eight notebooks, five lectures, seven demos, ten README languages.</desc>
+  <defs>
+    <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#10172b"/><stop offset="1" stop-color="#222344"/></linearGradient>
+    <pattern id="grid" width="38" height="38" patternUnits="userSpaceOnUse"><path d="M38 0H0V38" fill="none" stroke="#c1c8ff" stroke-opacity=".055"/></pattern>
+  </defs>
+  <rect width="1200" height="300" rx="22" fill="url(#bg)"/>
+  <rect width="1200" height="300" rx="22" fill="url(#grid)"/>
+  <circle cx="1120" cy="10" r="200" fill="#f2a8c7" opacity=".04"/>
+  <g font-family="Arial, Helvetica, sans-serif">
+    <text x="48" y="48" fill="#f2a8c7" font-size="13" letter-spacing="3">A BEGINNER'S RESEARCH JOURNEY</text>
+    <text x="46" y="111" fill="#ffffff" font-size="53" font-weight="700">Quant for babies<tspan fill="#f2a8c7">.</tspan></text>
+    <text x="48" y="151" fill="#bdc5dc" font-size="20">Learn the idea. Run the experiment. Explain the result.</text>
+    <g transform="translate(48 204)">
+      <rect width="150" height="48" rx="9" fill="#ffffff" fill-opacity=".06"/>
+      <text x="17" y="30" fill="#f2a8c7" font-size="22" font-weight="700">08<tspan dx="10" fill="#dfe4f2" font-size="13" font-weight="400">NOTEBOOKS</tspan></text>
+      <rect x="164" width="140" height="48" rx="9" fill="#ffffff" fill-opacity=".06"/>
+      <text x="181" y="30" fill="#f2a8c7" font-size="22" font-weight="700">05<tspan dx="10" fill="#dfe4f2" font-size="13" font-weight="400">LECTURES</tspan></text>
+      <rect x="318" width="130" height="48" rx="9" fill="#ffffff" fill-opacity=".06"/>
+      <text x="335" y="30" fill="#f2a8c7" font-size="22" font-weight="700">07<tspan dx="10" fill="#dfe4f2" font-size="13" font-weight="400">DEMOS</tspan></text>
+      <rect x="462" width="184" height="48" rx="9" fill="#ffffff" fill-opacity=".06"/>
+      <text x="479" y="30" fill="#f2a8c7" font-size="22" font-weight="700">10<tspan dx="10" fill="#dfe4f2" font-size="13" font-weight="400">README LANGUAGES</tspan></text>
+    </g>
+  </g>
+  <g transform="translate(810 58)">
+    <path d="M0 153H330M0 102H330M0 51H330" stroke="#b9c4ee" stroke-opacity=".12" stroke-dasharray="4 7"/>
+    <path d="M4 158L38 144 71 151 104 107 137 119 170 83 203 99 236 51 269 67 310 13" fill="none" stroke="#f2a8c7" stroke-width="3" stroke-linejoin="round"/>
+    <path d="M4 165L38 157 71 159 104 137 137 140 170 121 203 125 236 105 269 107 310 81" fill="none" stroke="#8195d8" stroke-width="2"/>
+    <circle cx="310" cy="13" r="6" fill="#f2a8c7"/>
+    <text x="0" y="193" font-family="Arial, Helvetica, sans-serif" font-size="14" fill="#8d9abf" letter-spacing="2">ILLUSTRATIVE PATHS / NOT PERFORMANCE</text>
+  </g>
+</svg>
